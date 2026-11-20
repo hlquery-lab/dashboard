@@ -1,0 +1,328 @@
+/* A cohesive, Metronic-inspired surface system for the HLQuery workspace. */
+.workspace {
+  --canvas: #f4f7fa;
+  --surface: #ffffff;
+  --line: #e4e9ef;
+  --text: #1e293b;
+  --muted: #78879a;
+  --hover: #f5f8fb;
+  --primary: #1976d3;
+  --primary-hover: #1565b8;
+  --primary-soft: #edf5fd;
+  background: var(--canvas);
+  color: var(--text);
+}
+
+.workspace.dark {
+  --canvas: #111b27;
+  --surface: #172534;
+  --line: #2a3a4b;
+  --text: #e7edf5;
+  --muted: #9aaabd;
+  --hover: #1d3042;
+  --primary: #1976d3;
+  --primary-hover: #42a5f5;
+  --primary-soft: #19364f;
+}
+
+.workspace .topbar {
+  height: 68px;
+  padding-inline: 30px;
+  border-bottom-color: var(--line);
+  box-shadow: 0 1px 2px #13263a05;
+}
+
+.workspace .breadcrumb {
+  gap: 10px;
+  font-size: 12px;
+}
+
+.workspace .topbar .global-search.command-trigger {
+  min-width: 240px;
+  height: 36px;
+  border-radius: 7px;
+  background: var(--canvas);
+}
+
+.workspace .icon-button {
+  width: 36px;
+  height: 36px;
+  border-radius: 7px;
+}
+
+.workspace .profile-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  background: #e8f2fc;
+  color: #1976d3;
+  font-weight: 700;
+}
+
+.workspace.dark .profile-avatar {
+  background: #1b3d5d;
+  color: #91c8fa;
+}
+
+.workspace .main-shell main {
+  padding: 28px 30px 0;
+}
+
+.workspace .page-heading {
+  margin-bottom: 23px;
+}
+
+.workspace .page-heading h1 {
+  font-size: clamp(1.55rem, 2vw, 1.8rem);
+  line-height: 1.25;
+  letter-spacing: -0.045em;
+  font-weight: 650;
+}
+
+.workspace .page-heading p {
+  margin-top: 6px;
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.workspace .eyebrow {
+  margin-bottom: 7px;
+  font-size: 9px;
+  letter-spacing: 0.11em;
+  font-weight: 650;
+}
+
+.workspace .demo-badge {
+  border: 1px solid #d8e9f8;
+  border-radius: 5px;
+  background: #edf5fd;
+  color: #1976d3;
+  font-size: 9px;
+  padding: 3px 7px;
+}
+
+.workspace.dark .demo-badge {
+  border-color: #254766;
+  background: #1a3853;
+  color: #8dc7ff;
+}
+
+.workspace .button {
+  min-height: 37px;
+  padding-inline: 12px;
+  border-radius: 7px;
+  font-size: 11px;
+  font-weight: 600;
+  transition:
+    transform 0.16s ease,
+    box-shadow 0.16s ease,
+    background 0.16s ease;
+}
+
+.workspace .button.primary {
+  background: #1976d3;
+  border-color: #1976d3;
+  box-shadow: 0 3px 8px #1976d326;
+}
+
+.workspace .button.primary:hover {
+  background: #1565b8;
+  box-shadow: 0 5px 12px #1976d333;
+  transform: translateY(-1px);
+}
+
+.workspace .card {
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: var(--surface);
+  box-shadow: 0 2px 5px #18385806;
+}
+
+.workspace.dark .card {
+  box-shadow: 0 2px 8px #00000012;
+}
+
+.workspace .stat-card {
+  border-top: 1px solid var(--line);
+  padding: 17px 18px 16px;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.workspace .stat-card:hover {
+  transform: translateY(-2px);
+  border-color: #d5e2ee;
+  box-shadow: 0 8px 20px #1d3c570d;
+}
+
+.workspace .stat-top {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.workspace .stat-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+}
+
+.workspace .stat-middle {
+  margin: 13px 0 12px;
+}
+
+.workspace .stat-middle strong {
+  color: var(--text);
+  font-size: 27px;
+  font-weight: 650;
+  letter-spacing: -0.045em;
+}
+
+.workspace .stat-bottom,
+.workspace .stat-bottom small {
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.workspace .card-header {
+  padding: 17px 19px 14px;
+}
+
+.workspace .card-header h2 {
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 650;
+  letter-spacing: -0.015em;
+}
+
+.workspace .card-header p {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.workspace .welcome-banner {
+  min-height: 218px;
+  padding: 27px 32px;
+  border-radius: 12px;
+  background:
+    radial-gradient(ellipse at 85% 15%, #d9eafa 0%, transparent 48%),
+    #edf5fd;
+  border-color: #dfebf6;
+}
+
+.workspace.dark .welcome-banner {
+  background:
+    radial-gradient(ellipse at 85% 15%, #1a3956 0%, transparent 48%),
+    #172b3e;
+  border-color: #294258;
+}
+
+.workspace.dark .welcome-banner h2 {
+  color: #e8f3fd;
+}
+
+.workspace.dark .welcome-banner p,
+.workspace.dark .welcome-kicker {
+  color: #a9c3da;
+}
+
+.workspace .overview-tabs {
+  margin-bottom: 20px;
+}
+
+.workspace .overview-tabs button {
+  padding-bottom: 12px;
+  font-size: 11px;
+}
+
+.workspace .stats-grid {
+  gap: 15px;
+  margin-bottom: 18px;
+}
+
+.workspace th {
+  background: color-mix(in srgb, var(--canvas) 74%, var(--surface));
+  color: var(--muted);
+  font-size: 9px;
+  font-weight: 650;
+  letter-spacing: 0.075em;
+}
+
+.workspace td {
+  border-color: var(--line);
+}
+
+.workspace tbody tr {
+  transition: background 0.14s ease;
+}
+
+.workspace .global-search,
+.workspace .table-search,
+.workspace .filter-control select,
+.workspace input:not([type="checkbox"]),
+.workspace select,
+.workspace textarea {
+  border-radius: 7px;
+}
+
+.workspace :is(input, select, textarea, button, a):focus-visible {
+  outline: 2px solid #1976d399;
+  outline-offset: 2px;
+}
+
+.workspace .main-footer {
+  border-top-color: transparent;
+  color: var(--muted);
+}
+
+.workspace.dark .workspace-view-tabs,
+.workspace.dark .global-search,
+.workspace.dark .table-search,
+.workspace.dark .filter-control select {
+  background-color: #142231;
+}
+
+@media (max-width: 1000px) {
+  .workspace .topbar {
+    height: 64px;
+    padding-inline: 19px;
+  }
+
+  .workspace .main-shell main {
+    padding: 23px 22px 0;
+  }
+}
+
+@media (max-width: 700px) {
+  .workspace .topbar {
+    padding-inline: 13px;
+  }
+
+  .workspace .main-shell main {
+    padding: 20px 15px 0;
+  }
+
+  .workspace .page-heading {
+    margin-bottom: 18px;
+  }
+
+  .workspace .welcome-banner {
+    min-height: 190px;
+    padding: 22px 20px;
+  }
+
+  .workspace .stats-grid {
+    gap: 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .workspace .stat-card,
+  .workspace .button,
+  .workspace tbody tr {
+    transition: none;
+  }
+}

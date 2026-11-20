@@ -5,5 +5,6 @@ import "./style.css";
 import "./workspace.css";
 
 import "./navigation.css";
+import "./metronic.css";
 
 createApp(App).use(vuetify).mount("#app");

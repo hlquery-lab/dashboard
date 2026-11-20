@@ -1,41 +1,69 @@
-# HLQuery Workspace
+<div align="center">
+  <img src="public/logo.png" alt="HLQuery logo" width="132">
+</div>
 
-Demo independiente de Vue 3, Vuetify 4 y Vite, con diseño propio inspirado en la navegación y organización de Metronic. Incluye tema claro y oscuro, navegación adaptable a móviles y submenús desplegables inspirados en Metronic, con el color principal #1976d3.
+<div align="center">
 
-```sh
+**A flexible workspace for projects, teams, and business metrics.**
+
+[![Demo](https://img.shields.io/badge/Demo-live-1976d3?logo=google-chrome&logoColor=white&labelColor=101d2e)](https://dashboard.hlquery.com)
+[![Vue](https://img.shields.io/badge/Vue-3-42b883?logo=vuedotjs&logoColor=white&labelColor=101d2e)](https://vuejs.org/)
+[![Vuetify](https://img.shields.io/badge/Vuetify-4-1867c0?logo=vuetify&logoColor=white&labelColor=101d2e)](https://vuetifyjs.com/)
+[![Vite](https://img.shields.io/badge/Vite-8-646cff?logo=vite&logoColor=white&labelColor=101d2e)](https://vite.dev/)
+
+</div>
+
+> Explore the live dashboard at [dashboard.hlquery.com](https://dashboard.hlquery.com).
+
+### Overview
+
+HLQuery Dashboard brings projects, reporting, schedules, and team activity together in one responsive workspace. Use the interactive views to organize work and get a clear picture of what is moving forward.
+
+### Features
+
+- Track projects in a searchable list, a drag-and-drop board, or a calendar.
+- Review business metrics with interactive charts and reports.
+- Keep up with team members, project updates, invoices, and payment records.
+- Adjust the workspace with light and dark themes, compact tables, and compact navigation.
+- Jump between pages and projects with `Ctrl+K` or `⌘K`.
+- Use the dashboard on desktop, tablet, and mobile.
+
+### Quick start
+
+Requires Node.js and npm.
+
+```bash
+git clone https://github.com/hlquery-lab/dashboard.git
+cd dashboard
 npm install
 npm run dev
 ```
 
-Disponible en http://localhost:5174. `npm run build` genera `dist/`; `npm run preview` sirve el build en el puerto 4174.
+Vite serves the local dashboard at [http://localhost:5174](http://localhost:5174).
 
-## Vistas y acciones
+### Commands
 
-- Overview: indicadores, resumen de ingresos interactivo y actividad de ejemplo.
-- Projects: búsqueda, filtros, creación con diálogo Vuetify, detalle con cambios de estado y exportación CSV.
-- Board: tablero Kanban con Vue Draggable 4; mueve proyectos por arrastre o con el selector de estado accesible. Los cambios se guardan y se reflejan en la lista, los gráficos y el registro de actividad.
-- Team: colaboradores y proyectos asignados.
-- Reports: resumen del workspace y exportación de proyectos.
-- Charts: gráficos interactivos de líneas, barras, distribución y radar con Chart.js; selector semanal/semestral. La distribución usa los proyectos del navegador; las otras métricas son ejemplos.
-- Calendar: calendario mensual con navegación, selección de día y agenda basada en las fechas de los proyectos.
-- Billing: facturas de ejemplo con búsqueda, filtro, ordenamiento, detalle y descarga de texto. No procesa pagos ni emite documentos tributarios.
-- Payments: resumen de pagos recibidos de ejemplo y exportación CSV.
-- Activity: registro de las creaciones y cambios de estado locales, con filtros y actividad inicial de ejemplo.
-- Appearance: tema, densidad de tablas y navegación compacta persistentes.
-- Settings y Help: preferencias generales y ayuda del demo.
-- Búsqueda rápida con Ctrl/⌘ + K: abre páginas o encuentra proyectos por nombre o cliente.
+| Command | Description |
+| --- | --- |
+| `npm run dev` | Start the local development server. |
+| `npm run build` | Create a production build in `dist/`. |
+| `npm run preview` | Preview the production build locally. |
+| `npm test` | Run the Playwright browser tests. |
+| `npm run test:ui` | Open the Playwright test runner. |
 
-Los proyectos y las preferencias persisten en localStorage. Las cifras financieras, colaboradores, facturas y actividad inicial son datos de demostración. La actividad de tus creaciones y cambios de estado se registra localmente. No incluye API, autenticación ni sincronización entre dispositivos.
+### Built with
 
-## Verificación
+Vue 3, Vuetify 4, Vite, Chart.js, Vue Draggable, VueUse, AutoAnimate, and Lucide icons.
 
-```sh
+### Demo data
+
+Projects and preferences are stored in the current browser. Financial figures, invoices, team members, and initial activity are illustrative demo data. The demo does not include authentication, a backend API, cross-device sync, or payment processing.
+
+### Run browser tests
+
+Install Chromium for Playwright, then run the test suite:
+
+```bash
 npx playwright install chromium
 npm test
 ```
-
-Las seis pruebas de navegador cubren navegación anidada e historial, gráficos, calendario, facturas, pagos, creación de proyectos, persistencia, arrastre Kanban, cambios de estado, registro de actividad, preferencias de apariencia, búsqueda con teclado y anchos móviles. `npm run test:ui` abre Playwright UI.
-
-Configura `VITE_LANDING_URL` antes del build para enlazar la landing publicada. El valor predeterminado de desarrollo es http://localhost:5173.
-
-La interfaz usa Vuetify y Lucide; Chart.js se ocupa de los gráficos, VueUse de las preferencias persistentes, AutoAnimate de los submenús y Vue Draggable 4 del tablero. Las animaciones respetan la preferencia de movimiento reducido.
