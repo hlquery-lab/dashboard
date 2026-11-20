@@ -1,0 +1,27 @@
+{
+  "name": "hlquery-dashboard",
+  "private": true,
+  "version": "2.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0 --port 5174",
+    "build": "vite build",
+    "preview": "vite preview --port 4174",
+    "test": "playwright test",
+    "test:ui": "playwright test --ui"
+  },
+  "dependencies": {
+    "@formkit/auto-animate": "^0.10.2",
+    "@vueuse/core": "^15.0.0",
+    "chart.js": "^4.6.1",
+    "lucide-vue-next": "^1.0.0",
+    "vue": "^3.5.45",
+    "vuedraggable": "^4.1.0",
+    "vuetify": "^4.3.4"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.65.1",
+    "@vitejs/plugin-vue": "^6.0.11",
+    "vite": "^8.3.8"
+  }
+}
