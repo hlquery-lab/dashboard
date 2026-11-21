@@ -118,3 +118,28 @@ test("mobile navigation and layouts fit the viewport", async ({ page }) => {
     expect(overflow, `${name} overflows the mobile viewport`).toBe(false);
   }
 });
+
+test("overview and reports charts shrink when resizing from desktop to mobile", async ({
+  page,
+}) => {
+  for (const name of ["Overview", "Reports"]) {
+    await page.setViewportSize({ width: 1440, height: 1080 });
+    await page.goto(`/#${name}`);
+    await expect(page.locator("canvas")).toHaveCount(1);
+    await page.setViewportSize({ width: 390, height: 844 });
+    await expect
+      .poll(() =>
+        page.evaluate(
+          () => document.documentElement.scrollWidth <= innerWidth + 1,
+        ),
+      )
+      .toBe(true);
+    await expect
+      .poll(() =>
+        page
+          .locator(".revenue-card")
+          .evaluate((element) => element.getBoundingClientRect().width),
+      )
+      .toBeLessThanOrEqual(360);
+  }
+});

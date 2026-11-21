@@ -1,5 +1,8 @@
 import {
   LayoutDashboard,
+  ListTodo,
+  ContactRound,
+  Target,
   FolderKanban,
   ChartNoAxesCombined,
   Users,
@@ -45,6 +48,24 @@ export const navigation = [
         ],
       },
       {
+        label: "My tasks",
+        page: "Tasks",
+        icon: ListTodo,
+        badge: "TODO",
+        description: "Organize your next steps and complete tasks",
+      },
+    ],
+  },
+  {
+    section: "BUSINESS",
+    items: [
+      {
+        label: "Clients",
+        page: "Clients",
+        icon: ContactRound,
+        description: "Explore client relationships and project budgets",
+      },
+      {
         label: "Analytics",
         id: "analytics",
         icon: ChartNoAxesCombined,
@@ -63,6 +84,18 @@ export const navigation = [
           },
         ],
       },
+      {
+        label: "Goals & targets",
+        page: "Goals",
+        icon: Target,
+        badge: "NEW",
+        description: "Track delivery, progress, and portfolio goals",
+      },
+    ],
+  },
+  {
+    section: "MANAGEMENT",
+    items: [
       {
         label: "Workspace",
         id: "workspace",

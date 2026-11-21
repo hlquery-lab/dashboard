@@ -33,6 +33,7 @@ Chart.register(
   Tooltip,
   Legend,
 );
+Chart.defaults.font.family = '"Inter Variable", Inter, sans-serif';
 const props = defineProps({
   type: { type: String, default: "line" },
   labels: Array,
@@ -86,7 +87,7 @@ function render() {
             boxWidth: 7,
             boxHeight: 7,
             padding: 22,
-            font: { family: "Inter, sans-serif", size: 11 },
+            font: { family: '"Inter Variable", Inter, sans-serif', size: 11 },
           },
         },
         tooltip: {
@@ -131,7 +132,12 @@ function render() {
     },
   });
 }
-onMounted(render);
+onMounted(() => {
+  render();
+  document.fonts.ready.then(() => {
+    if (canvas.value) chart?.update("none");
+  });
+});
 watch(() => [props.type, props.labels, props.datasets, props.dark], render, {
   deep: true,
 });

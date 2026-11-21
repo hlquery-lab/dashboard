@@ -10,7 +10,7 @@ import {
 import { useStorage } from "@vueuse/core";
 import SidebarNavigation from "./components/SidebarNavigation.vue";
 import CommandPalette from "./components/CommandPalette.vue";
-import { pageGroups } from "./data/navigation.js";
+import { pageGroups, navigationPages } from "./data/navigation.js";
 import {
   LayoutDashboard,
   FolderKanban,
@@ -46,6 +46,7 @@ import {
 const WorkspaceChart = defineAsyncComponent(
   () => import("./components/WorkspaceChart.vue"),
 );
+const ProductivityView = defineAsyncComponent(() => import("./views/ProductivityView.vue"));
 const ChartsView = defineAsyncComponent(() => import("./views/ChartsView.vue"));
 const CalendarView = defineAsyncComponent(
   () => import("./views/CalendarView.vue"),
@@ -54,6 +55,9 @@ const BillingView = defineAsyncComponent(
   () => import("./views/BillingView.vue"),
 );
 const BoardView = defineAsyncComponent(() => import("./views/BoardView.vue"));
+const SettingsView = defineAsyncComponent(
+  () => import("./views/SettingsView.vue"),
+);
 const AppearanceView = defineAsyncComponent(
   () => import("./views/AppearanceView.vue"),
 );
@@ -63,7 +67,7 @@ const ActivityView = defineAsyncComponent(
 const PaymentsView = defineAsyncComponent(
   () => import("./views/PaymentsView.vue"),
 );
-const landingUrl = import.meta.env.VITE_LANDING_URL || "http://localhost:5173";
+const landingUrl = import.meta.env.VITE_LANDING_URL || "https://hlquery.com";
 const legacyPages = {
   "Vista general": "Overview",
   Proyectos: "Projects",
@@ -77,24 +81,12 @@ const pageFromHash = () => {
   return legacyPages[value] || value || "Overview";
 };
 const page = ref(pageFromHash());
-const allowedPages = [
-  "Overview",
-  "Projects",
-  "Team",
-  "Reports",
-  "Charts",
-  "Calendar",
-  "Billing",
-  "Settings",
-  "Help",
-  "Board",
-  "Appearance",
-  "Activity",
-  "Payments",
-];
+const allowedPages = navigationPages.map((item) => item.page);
 if (!allowedPages.includes(page.value)) page.value = "Overview";
 const compact = useStorage("hlquery-compact-navigation", false);
 const dense = useStorage("hlquery-compact-tables", false);
+const contentWidth = useStorage("hlquery-content-width", 1540);
+const cardRadius = useStorage("hlquery-card-radius", 11);
 const commandOpen = ref(false);
 const selectedProjectId = ref(null);
 const activityEntries = useStorage("hlquery-activity", [
@@ -474,6 +466,9 @@ function hashchange() {
   }
 }
 const pageDescriptions = {
+  Tasks: "Focus on what comes next. Your personal workspace checklist.",
+  Clients: "Every relationship, project, and budget in one place.",
+  Goals: "Turn your project portfolio into measurable progress.",
   Board: "A place for every project. A clear next step for your team.",
   Activity: "The small steps that move your workspace forward.",
   Appearance: "Settle into a workspace that feels like you.",
@@ -525,6 +520,10 @@ onBeforeUnmount(() => {
     class="workspace"
     :theme="dark ? 'workspaceDark' : 'workspaceLight'"
     :class="{ dark, compact, dense }"
+    :style="{
+      '--workspace-content-width': contentWidth + 'px',
+      '--workspace-card-radius': cardRadius + 'px',
+    }"
   >
     <a class="skip-link" href="#main">Skip to content</a>
     <button
@@ -535,8 +534,12 @@ onBeforeUnmount(() => {
     ></button>
     <aside class="sidebar" :class="{ open: menuOpen }">
       <a href="#Overview" class="brand" @click.prevent="navigate('Overview')"
-        ><img class="brand-mark" src="/logo.png" alt="" aria-hidden="true"
-        ><span class="brand-word">HLQuery<span class="brand-dot">.</span></span
+        ><img
+          class="brand-mark"
+          src="/logo.png"
+          alt=""
+          aria-hidden="true"
+        /><span class="brand-word">HLQuery<span class="brand-dot">.</span></span
         ><span class="pro-tag">PRO</span></a
       >
       <button class="workspace-switch" @click="navigate('Settings')">
@@ -550,6 +553,8 @@ onBeforeUnmount(() => {
         :page="page"
         :compact="compact && !menuOpen"
         :project-count="projects.length"
+        :completed-count="projects.filter((project) => project.status === 'Completed').length"
+        @search="commandOpen = true"
         @navigate="navigate"
         @expand="compact = false"
       />
@@ -712,6 +717,43 @@ onBeforeUnmount(() => {
             </button>
           </div>
         </div>
+        <section
+          v-if="['Projects', 'Board', 'Calendar'].includes(page)"
+          class="project-pulse"
+          aria-label="Project summary"
+        >
+          <article
+            v-for="(stage, index) in [
+              'In progress',
+              'In review',
+              'Pending',
+              'Completed',
+            ]"
+            :key="stage"
+            :class="'pulse-tone-' + index"
+          >
+            <span class="pulse-dot"></span><span>{{ stage }}</span>
+            <strong>{{
+              projects
+                .filter((project) => project.status === stage)
+                .length.toString()
+                .padStart(2, "0")
+            }}</strong>
+            <div class="pulse-track" aria-hidden="true">
+              <i
+                :style="{
+                  width:
+                    (projects.length
+                      ? (projects.filter((project) => project.status === stage)
+                          .length /
+                          projects.length) *
+                        100
+                      : 0) + '%',
+                }"
+              ></i>
+            </div>
+          </article>
+        </section>
         <div
           v-if="['Projects', 'Board', 'Calendar'].includes(page)"
           class="workspace-view-tabs"
@@ -748,6 +790,7 @@ onBeforeUnmount(() => {
           @density="dense = $event"
           @navigation="compact = $event"
         />
+        <ProductivityView v-if="['Tasks', 'Clients', 'Goals'].includes(page)" :key="page" :page="page" :projects="projects" @open="openProject" />
         <ActivityView v-if="page === 'Activity'" :entries="activityEntries" />
         <PaymentsView
           v-if="page === 'Payments'"
@@ -772,9 +815,7 @@ onBeforeUnmount(() => {
             >
             <h2>A clear view.<br />A better workday.</h2>
             <p>
-              {{
-                projects.filter((p) => p.status !== "Completed").length
-              }}
+              {{ projects.filter((p) => p.status !== "Completed").length }}
               active projects. {{ team.length }} teammates. One place to move
               forward.
             </p>
@@ -1169,57 +1210,111 @@ onBeforeUnmount(() => {
             <div class="decorative-orbit" aria-hidden="true"></div>
           </article>
         </section>
-        <section v-if="page === 'Team'" class="team-grid">
-          <article
-            v-for="person in visibleTeam"
-            :key="person.initials"
-            class="card member-card"
-          >
-            <span class="member-avatar" :class="person.color">{{
-              person.initials
-            }}</span>
-            <h2>{{ person.name }}</h2>
-            <p>{{ person.role }}</p>
-            <span class="badge green">Team member</span>
+        <section v-if="page === 'Team'" class="team-section">
+          <div class="team-banner">
+            <span class="team-banner-icon"><Users :size="28" /></span>
             <div>
-              <span>Assigned projects</span
-              ><strong>{{
-                projects.filter((p) => p.members.includes(person.initials))
-                  .length
-              }}</strong>
+              <span class="panel-kicker">BETTER TOGETHER</span>
+              <h2>Good people. Great work.</h2>
+              <p>A shared view of the people behind your projects.</p>
             </div>
-          </article>
-          <p v-if="!visibleTeam.length" class="empty-state">
-            No team members found.
-          </p>
-        </section>
-        <section v-if="page === 'Settings'" class="card settings-card">
-          <h2>Workspace preferences</h2>
-          <form @submit.prevent="saveSettings">
-            <label
-              >Workspace name<input
-                v-model="workspaceName"
-                required
-                maxlength="40"
-                pattern=".*\S.*"
-            /></label>
-            <div class="settings-row">
-              <div>
-                <strong>Appearance</strong>
-                <p>Choose the appearance that works for you.</p>
+            <div class="team-banner-count">
+              <strong>{{ team.length.toString().padStart(2, "0") }}</strong
+              ><span>team members</span>
+            </div>
+          </div>
+          <div class="team-grid">
+            <article
+              v-for="person in visibleTeam"
+              :key="person.initials"
+              class="card member-card"
+              :class="'member-tone-' + person.color"
+            >
+              <div class="member-cover" aria-hidden="true">
+                <i></i><i></i><i></i>
               </div>
-              <button type="button" class="button" @click="toggleDark">
-                <Sun :size="16" />{{ dark ? "Light theme" : "Dark theme" }}
-              </button>
-            </div>
-            <p class="settings-note">
-              Projects and preferences are saved in this browser. Financial
-              metrics and activity use sample data.
+              <span class="member-avatar" :class="person.color">{{
+                person.initials
+              }}</span>
+              <h2>{{ person.name }}</h2>
+              <p>{{ person.role }}</p>
+              <span class="member-email">{{ person.email }}</span>
+              <span class="badge green">Team member</span>
+              <div class="member-assignment">
+                <span>Assigned projects</span
+                ><strong>{{
+                  projects.filter((project) =>
+                    project.members.includes(person.initials),
+                  ).length
+                }}</strong>
+              </div>
+              <div class="member-completion">
+                <span>Completed assignments</span
+                ><strong
+                  >{{
+                    projects.filter(
+                      (project) =>
+                        project.members.includes(person.initials) &&
+                        project.status === "Completed",
+                    ).length
+                  }}
+                  /
+                  {{
+                    projects.filter((project) =>
+                      project.members.includes(person.initials),
+                    ).length
+                  }}</strong
+                >
+              </div>
+              <progress
+                class="member-progress"
+                :value="
+                  projects.filter(
+                    (project) =>
+                      project.members.includes(person.initials) &&
+                      project.status === 'Completed',
+                  ).length
+                "
+                :max="
+                  projects.filter((project) =>
+                    project.members.includes(person.initials),
+                  ).length || 1
+                "
+                :aria-label="person.name + ' completed assignments'"
+              ></progress>
+            </article>
+            <p v-if="!visibleTeam.length" class="empty-state">
+              No team members found.
             </p>
-            <button class="button primary">Save changes</button>
-          </form>
+          </div>
         </section>
+        <SettingsView
+          v-if="page === 'Settings'"
+          v-model:name="workspaceName"
+          :dark="dark"
+          :dense="dense"
+          :compact="compact"
+          :content-width="contentWidth"
+          :card-radius="cardRadius"
+          :project-count="projects.length"
+          :completed-count="completed"
+          @save="saveSettings"
+          @theme="setTheme"
+          @density="dense = $event"
+          @navigation="compact = $event"
+          @width="contentWidth = $event"
+          @radius="cardRadius = $event"
+          @appearance="navigate('Appearance')"
+        />
         <section v-if="page === 'Help'" class="help-grid">
+          <div class="help-banner">
+            <span><CircleHelp :size="28" /></span>
+            <div>
+              <span class="panel-kicker">A LITTLE GUIDANCE</span>
+              <h2>Make yourself at home.</h2>
+              <p>Quick answers to keep your work moving.</p>
+            </div>
+          </div>
           <details
             v-for="item in [
               {

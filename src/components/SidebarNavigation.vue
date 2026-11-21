@@ -2,14 +2,25 @@
 import { watch } from "vue";
 import { useStorage } from "@vueuse/core";
 import { vAutoAnimate } from "@formkit/auto-animate/vue";
-import { ChevronDown } from "lucide-vue-next";
+import {
+  ChevronDown,
+  ChevronRight,
+  Search,
+  ArrowUpRight,
+  Star,
+  LayoutDashboard,
+  Columns3,
+  CalendarDays,
+  ChartNoAxesCombined,
+} from "lucide-vue-next";
 import { navigation } from "../data/navigation.js";
 const props = defineProps({
   page: String,
   compact: Boolean,
   projectCount: Number,
+  completedCount: Number,
 });
-const emit = defineEmits(["navigate", "expand"]);
+const emit = defineEmits(["navigate", "expand", "search"]);
 const expanded = useStorage("hlquery-navigation-groups", ["projects"]);
 const active = (item) =>
   item.page === props.page ||
@@ -41,6 +52,38 @@ function toggle(item) {
 </script>
 <template>
   <nav class="sidebar-navigation" aria-label="Main navigation">
+    <button
+      class="rail-search"
+      :class="{ 'is-compact': compact }"
+      aria-label="Search navigation"
+      :title="compact ? 'Search navigation' : undefined"
+      @click="emit('search')"
+    >
+      <Search :size="16" /><template v-if="!compact"
+        ><span>Quick search</span><kbd>⌘ K</kbd></template
+      >
+    </button>
+    <div v-if="!compact" class="rail-shortcuts">
+      <div class="navigation-caption"><Star :size="11" /> QUICK ACCESS</div>
+      <div class="rail-shortcut-grid">
+        <a
+          v-for="shortcut in [
+            { page: 'Overview', label: 'Home', icon: LayoutDashboard },
+            { page: 'Board', label: 'Board', icon: Columns3 },
+            { page: 'Calendar', label: 'Plan', icon: CalendarDays },
+          ]"
+          :key="shortcut.page"
+          :href="`#${shortcut.page}`"
+          :aria-label="`Quick access: ${shortcut.label}`"
+          :aria-current="page === shortcut.page ? 'page' : undefined"
+          @click.prevent="emit('navigate', shortcut.page)"
+        >
+          <component :is="shortcut.icon" :size="17" /><span>{{
+            shortcut.label
+          }}</span>
+        </a>
+      </div>
+    </div>
     <section
       v-for="section in navigation"
       :key="section.section"
@@ -68,9 +111,9 @@ function toggle(item) {
             :title="compact ? item.label : undefined"
             @click="toggle(item)"
           >
-            <component :is="item.icon" :size="19" /><span
-              class="nav-item-label"
-              >{{ item.label }}</span
+            <span class="nav-icon"
+              ><component :is="item.icon" :size="18" /></span
+            ><span class="nav-item-label">{{ item.label }}</span
             ><small
               v-if="item.id === 'projects' && !compact"
               class="nav-project-count"
@@ -92,11 +135,19 @@ function toggle(item) {
               :class="{ 'submenu-active': page === child.page }"
               :aria-current="page === child.page ? 'page' : undefined"
               @click.prevent="emit('navigate', child.page)"
-              ><i class="submenu-dot"></i><span>{{ child.label }}</span
+              ><component
+                :is="child.icon"
+                class="nav-child-icon"
+                :size="15" /><span class="nav-item-label">{{
+                child.label
+              }}</span
               ><span v-if="child.page === 'Board'" class="nav-child-tag"
                 >NEW</span
-              ></a
-            >
+              ><ChevronRight
+                class="nav-selection-chevron"
+                :size="13"
+                aria-hidden="true"
+            /></a>
           </div>
         </template>
         <a
@@ -108,16 +159,50 @@ function toggle(item) {
           :aria-label="item.label"
           :title="compact ? item.label : undefined"
           @click.prevent="emit('navigate', item.page)"
-          ><component :is="item.icon" :size="19" /><span
-            class="nav-item-label"
-            >{{ item.label }}</span
+          ><span class="nav-icon"><component :is="item.icon" :size="18" /></span
+          ><span class="nav-item-label">{{ item.label }}</span
           ><span
-            v-if="item.page === 'Overview' && !compact"
-            class="nav-overview-dot"
-          ></span
-        ></a>
+            v-if="item.badge && !compact"
+            class="nav-badge"
+            :class="{ 'badge-new': item.badge === 'NEW' }"
+            >{{ item.badge }}</span
+          ><ChevronRight
+            v-if="!compact"
+            class="nav-selection-chevron"
+            :size="14"
+            aria-hidden="true"
+        /></a>
       </div>
     </section>
+    <a
+      v-if="!compact"
+      href="#Reports"
+      class="rail-pulse"
+      @click.prevent="emit('navigate', 'Reports')"
+    >
+      <div class="rail-pulse-heading">
+        <ChartNoAxesCombined :size="15" /><span>Workspace pulse</span
+        ><ArrowUpRight :size="14" />
+      </div>
+      <div class="rail-pulse-value">
+        <strong
+          >{{
+            projectCount
+              ? Math.round((completedCount / projectCount) * 100)
+              : 0
+          }}<small>%</small></strong
+        ><span>projects delivered</span>
+      </div>
+      <div class="rail-pulse-track">
+        <i
+          :style="{
+            width:
+              (projectCount ? (completedCount / projectCount) * 100 : 0) + '%',
+          }"
+        ></i>
+      </div>
+      <p>{{ completedCount }} of {{ projectCount }} projects completed</p>
+    </a>
   </nav>
 </template>
 <style scoped>
@@ -178,7 +263,9 @@ function toggle(item) {
 .sidebar-navigation .nav-direct-link.direct-active {
   color: #f4f9ff;
   background: linear-gradient(100deg, #1976d33a, #1976d315 78%, transparent);
-  box-shadow: inset 2px 0 #58aaff, inset 0 0 0 1px #58aaff12;
+  box-shadow:
+    inset 2px 0 #58aaff,
+    inset 0 0 0 1px #58aaff12;
 }
 .sidebar-navigation .nav-direct-link.direct-active > svg {
   color: #75bdff;
@@ -237,7 +324,9 @@ function toggle(item) {
   margin-left: -5px;
   border-radius: 6px;
   text-decoration: none;
-  transition: color .16s ease, background .16s ease;
+  transition:
+    color 0.16s ease,
+    background 0.16s ease;
 }
 .nav-submenu a:hover {
   color: #e8f4ff;
@@ -248,17 +337,6 @@ function toggle(item) {
   font-weight: 550;
   background: #1976d31b;
 }
-.submenu-dot {
-  flex-shrink: 0;
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: #536b87;
-}
-.submenu-active .submenu-dot {
-  background: #6bb8ff;
-  box-shadow: 0 0 0 3px #1976d326, 0 0 9px #1976d355;
-}
 .nav-child-tag {
   margin-left: auto;
   color: #6899c8;
@@ -267,13 +345,6 @@ function toggle(item) {
   border-radius: 4px;
   padding: 2px 4px;
   letter-spacing: 0.06em;
-}
-.nav-overview-dot {
-  margin-left: auto;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: #68b7ff;
 }
 .sidebar-navigation a:focus-visible,
 .sidebar-navigation button:focus-visible {
