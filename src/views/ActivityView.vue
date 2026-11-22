@@ -62,7 +62,7 @@ const formatDate = (value) =>
           /></span>
           <div>
             <div class="timeline-meta">
-              <span>{{ entry.sample ? "Sample activity" : "Carlos F." }}</span
+              <span>{{ entry.sample ? "Sample activity" : "James Wilson" }}</span
               ><time :datetime="entry.date">{{ formatDate(entry.date) }}</time>
             </div>
             <h3>{{ entry.title }}</h3>

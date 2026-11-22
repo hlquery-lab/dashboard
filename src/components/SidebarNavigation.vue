@@ -3,14 +3,9 @@ import { watch } from "vue";
 import { useStorage } from "@vueuse/core";
 import { vAutoAnimate } from "@formkit/auto-animate/vue";
 import {
-  ChevronDown,
   ChevronRight,
   Search,
   ArrowUpRight,
-  Star,
-  LayoutDashboard,
-  Columns3,
-  CalendarDays,
   ChartNoAxesCombined,
 } from "lucide-vue-next";
 import { navigation } from "../data/navigation.js";
@@ -63,31 +58,11 @@ function toggle(item) {
         ><span>Quick search</span><kbd>⌘ K</kbd></template
       >
     </button>
-    <div v-if="!compact" class="rail-shortcuts">
-      <div class="navigation-caption"><Star :size="11" /> QUICK ACCESS</div>
-      <div class="rail-shortcut-grid">
-        <a
-          v-for="shortcut in [
-            { page: 'Overview', label: 'Home', icon: LayoutDashboard },
-            { page: 'Board', label: 'Board', icon: Columns3 },
-            { page: 'Calendar', label: 'Plan', icon: CalendarDays },
-          ]"
-          :key="shortcut.page"
-          :href="`#${shortcut.page}`"
-          :aria-label="`Quick access: ${shortcut.label}`"
-          :aria-current="page === shortcut.page ? 'page' : undefined"
-          @click.prevent="emit('navigate', shortcut.page)"
-        >
-          <component :is="shortcut.icon" :size="17" /><span>{{
-            shortcut.label
-          }}</span>
-        </a>
-      </div>
-    </div>
     <section
       v-for="section in navigation"
       :key="section.section"
       class="navigation-section"
+      :data-section="section.section"
     >
       <div v-if="!compact" class="navigation-caption">
         {{ section.section }}
@@ -118,7 +93,7 @@ function toggle(item) {
               v-if="item.id === 'projects' && !compact"
               class="nav-project-count"
               >{{ projectCount }}</small
-            ><ChevronDown v-if="!compact" class="group-chevron" :size="14" />
+            ><ChevronRight v-if="!compact" class="group-chevron" :size="14" aria-hidden="true" />
           </button>
           <div
             v-if="!compact && expanded.includes(item.id)"
@@ -135,10 +110,7 @@ function toggle(item) {
               :class="{ 'submenu-active': page === child.page }"
               :aria-current="page === child.page ? 'page' : undefined"
               @click.prevent="emit('navigate', child.page)"
-              ><component
-                :is="child.icon"
-                class="nav-child-icon"
-                :size="15" /><span class="nav-item-label">{{
+              ><span class="nav-child-bullet" aria-hidden="true"></span><span class="nav-item-label">{{
                 child.label
               }}</span
               ><span v-if="child.page === 'Board'" class="nav-child-tag"
@@ -284,7 +256,7 @@ function toggle(item) {
   transition: transform 0.2s;
 }
 .group-expanded .group-chevron {
-  transform: rotate(180deg);
+  transform: rotate(90deg);
 }
 .sidebar-navigation .nav-project-count {
   display: inline-grid;

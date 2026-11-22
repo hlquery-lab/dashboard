@@ -16,6 +16,11 @@ import {
   FileChartColumn,
   Receipt,
   Wallet,
+  Flag,
+  Library,
+  NotebookPen,
+  Files,
+  UsersRound,
 } from "lucide-vue-next";
 export const navigation = [
   {
@@ -44,6 +49,12 @@ export const navigation = [
             page: "Calendar",
             icon: CalendarDays,
             description: "Plan around project deadlines",
+          },
+          {
+            label: "Milestones",
+            page: "Milestones",
+            icon: Flag,
+            description: "Track upcoming deliveries and project progress",
           },
         ],
       },
@@ -113,6 +124,12 @@ export const navigation = [
             icon: Activity,
             description: "Follow updates across your workspace",
           },
+          {
+            label: "Team workload",
+            page: "Workload",
+            icon: UsersRound,
+            description: "See active assignments for each team member",
+          },
         ],
       },
       {
@@ -131,6 +148,30 @@ export const navigation = [
             page: "Payments",
             icon: Wallet,
             description: "See sample payments received",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    section: "RESOURCES",
+    items: [
+      {
+        label: "Library",
+        id: "library",
+        icon: Library,
+        children: [
+          {
+            label: "Notes",
+            page: "Notes",
+            icon: NotebookPen,
+            description: "Capture ideas and keep notes in this browser",
+          },
+          {
+            label: "Project files",
+            page: "Files",
+            icon: Files,
+            description: "Download project summaries from your portfolio",
           },
         ],
       },

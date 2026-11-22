@@ -488,12 +488,7 @@
   outline: 2px solid #83bfff;
   outline-offset: 2px;
 }
-.workspace .sidebar .rail-shortcut-grid a[aria-current="page"] {
-  color: #d0e7ff;
-  background: #1976d32b;
-  border-color: #69adff40;
-  box-shadow: inset 0 -2px #69b2ff;
-}
+
 .workspace.compact
   .sidebar
   .sidebar-navigation

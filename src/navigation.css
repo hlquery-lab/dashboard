@@ -1586,33 +1586,6 @@
   background: #ffffff09;
   color: #e6f3ff;
 }
-.rail-shortcuts {
-  margin-bottom: 25px;
-}
-.rail-shortcut-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 7px;
-}
-.rail-shortcut-grid a {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 7px;
-  padding: 12px 4px;
-  border: 1px solid #ffffff09;
-  border-radius: 9px;
-  background: #ffffff03;
-  color: #8ea4c0;
-  text-decoration: none;
-  font-size: 10px;
-}
-.rail-shortcut-grid a:hover,
-.rail-shortcut-grid a[aria-current="page"] {
-  color: #a3d2ff;
-  background: #1976d319;
-  border-color: #1976d340;
-}
 .workspace .sidebar .nav-badge {
   font-size: 8px;
   font-weight: 650;
@@ -1687,7 +1660,6 @@
   padding-inline: 0;
   width: 44px;
 }
-.rail-shortcut-grid a:focus-visible,
 .rail-pulse:focus-visible,
 .rail-search:focus-visible {
   outline: 2px solid #65b4ff;

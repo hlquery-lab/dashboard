@@ -46,6 +46,7 @@ import {
 const WorkspaceChart = defineAsyncComponent(
   () => import("./components/WorkspaceChart.vue"),
 );
+const WorkspaceResourcesView = defineAsyncComponent(() => import("./views/WorkspaceResourcesView.vue"));
 const ProductivityView = defineAsyncComponent(() => import("./views/ProductivityView.vue"));
 const ChartsView = defineAsyncComponent(() => import("./views/ChartsView.vue"));
 const CalendarView = defineAsyncComponent(
@@ -466,6 +467,10 @@ function hashchange() {
   }
 }
 const pageDescriptions = {
+  Milestones: "Every delivery ahead, with live progress from your projects.",
+  Workload: "See how active projects are distributed across your team.",
+  Notes: "A little space for ideas. Notes are saved in this browser.",
+  Files: "Your project summaries, ready to download and share.",
   Tasks: "Focus on what comes next. Your personal workspace checklist.",
   Clients: "Every relationship, project, and budget in one place.",
   Goals: "Turn your project portfolio into measurable progress.",
@@ -559,14 +564,9 @@ onBeforeUnmount(() => {
         @expand="compact = false"
       />
       <div class="sidebar-bottom">
-        <div class="upgrade">
-          <span class="upgrade-icon"><Sparkles :size="22" /></span
-          ><strong>Room to grow</strong>
-          <p>Your next great project starts here.</p>
-          <button @click="modal = true">
-            <Plus :size="16" /> Create project
-          </button>
-        </div>
+        <button v-if="!compact || menuOpen" class="sidebar-create" @click="modal = true">
+          <Plus :size="17" /><span>Create project</span>
+        </button>
         <a class="back-site" :href="landingUrl"
           ><ExternalLink :size="17" /><span>Visit website</span></a
         >
@@ -655,13 +655,13 @@ onBeforeUnmount(() => {
                 notifications = false;
               "
             >
-              <span class="avatar profile-avatar">CF</span
+              <span class="avatar profile-avatar">JW</span
               ><span class="profile-copy"
-                ><strong>Carlos F.</strong><small>Administrator</small></span
+                ><strong>James Wilson</strong><small>Administrator</small></span
               ><ChevronDown :size="14" />
             </button>
             <div v-if="profileOpen" class="popover profile-popover">
-              <strong>Carlos F.</strong><small>Demo session</small
+              <strong>James Wilson</strong><small>Demo session</small
               ><button @click="navigate('Settings')">
                 <Settings2 :size="16" /> Preferences</button
               ><a :href="landingUrl"
@@ -679,7 +679,7 @@ onBeforeUnmount(() => {
               <span class="demo-badge">Live demo</span>
             </div>
             <h1>
-              {{ page === "Overview" ? "Welcome back, Carlos" : page
+              {{ page === "Overview" ? "Welcome back, James" : page
               }}<span v-if="page === 'Overview'" class="wave">✦</span>
             </h1>
             <p>
@@ -790,6 +790,7 @@ onBeforeUnmount(() => {
           @density="dense = $event"
           @navigation="compact = $event"
         />
+        <WorkspaceResourcesView v-if="['Milestones', 'Workload', 'Notes', 'Files'].includes(page)" :key="page" :page="page" :projects="projects" @open="openProject" />
         <ProductivityView v-if="['Tasks', 'Clients', 'Goals'].includes(page)" :key="page" :page="page" :projects="projects" @open="openProject" />
         <ActivityView v-if="page === 'Activity'" :entries="activityEntries" />
         <PaymentsView

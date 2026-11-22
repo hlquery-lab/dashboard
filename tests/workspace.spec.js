@@ -8,7 +8,7 @@ test("workspace navigation, analytics, calendar, billing, and project persistenc
   page.on("pageerror", (error) => errors.push(error.message));
   await page.goto("/");
   await expect(
-    page.getByRole("heading", { name: "Welcome back, Carlos" }),
+    page.getByRole("heading", { name: "Welcome back, James" }),
   ).toBeVisible();
   await expect(page.locator("canvas")).toHaveCount(1);
   for (const name of [
