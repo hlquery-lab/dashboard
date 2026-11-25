@@ -4,13 +4,13 @@ import {
   Search,
   ArrowUpRight,
   CornerDownLeft,
-  FolderKanban,
+  ShoppingBag,
   X,
   Command,
 } from "lucide-vue-next";
 import { navigationPages } from "../data/navigation.js";
-const props = defineProps({ modelValue: Boolean, projects: Array });
-const emit = defineEmits(["update:modelValue", "navigate", "project"]);
+const props = defineProps({ modelValue: Boolean, orders: Array });
+const emit = defineEmits(["update:modelValue", "navigate", "order"]);
 const query = ref(""),
   input = ref(null),
   resultsRef = ref(null);
@@ -23,16 +23,16 @@ const results = computed(() => {
         .includes(term),
     )
     .map((p) => ({ ...p, kind: "Page" }));
-  const projects = term
-    ? props.projects
-        .filter((p) => `${p.name} ${p.client}`.toLowerCase().includes(term))
+  const orders = term
+    ? props.orders
+        .filter((p) => `${p.id} ${p.customerName}`.toLowerCase().includes(term))
         .slice(0, 5)
         .map((p) => ({
-          label: p.name,
-          description: p.client,
-          project: p,
-          icon: FolderKanban,
-          kind: "Project",
+          label: p.id,
+          description: p.customerName,
+          order: p,
+          icon: ShoppingBag,
+          kind: "Order",
         }))
     : [];
   const rank = (item) => {
@@ -43,7 +43,7 @@ const results = computed(() => {
     if (label.includes(term)) return 3;
     return 4;
   };
-  return [...pages, ...projects].sort((a, b) => rank(a) - rank(b)).slice(0, 12);
+  return [...pages, ...orders].sort((a, b) => rank(a) - rank(b)).slice(0, 12);
 });
 watch(
   () => props.modelValue,
@@ -57,7 +57,7 @@ watch(
 );
 function pick(item) {
   emit("update:modelValue", false);
-  if (item.project) emit("project", item.project);
+  if (item.order) emit("order", item.order);
   else emit("navigate", item.page);
 }
 function focusFirst(event) {
@@ -77,7 +77,7 @@ function moveFocus(event) {
 </script>
 <template>
   <v-dialog
-    aria-label="Workspace search"
+    aria-label="Store search"
     :model-value="modelValue"
     max-width="620"
     content-class="command-dialog"
@@ -88,7 +88,7 @@ function moveFocus(event) {
         <Search :size="21" /><input
           ref="input"
           v-model="query"
-          aria-label="Search pages and projects"
+          aria-label="Search pages and orders"
           placeholder="Where would you like to go?"
           @keydown.down="focusFirst"
           @keydown.enter.prevent="results[0] && pick(results[0])"
@@ -106,7 +106,7 @@ function moveFocus(event) {
       <div ref="resultsRef" class="command-results" @keydown="moveFocus">
         <button
           v-for="(item, i) in results"
-          :key="item.project?.id || item.page"
+          :key="item.order?.id || item.page"
           @click="pick(item)"
         >
           <span class="command-result-icon"
@@ -122,7 +122,7 @@ function moveFocus(event) {
         </button>
         <div v-if="!results.length" class="command-empty">
           <Search :size="24" /><strong>No matches yet.</strong>
-          <p>Try a page name, project, or client.</p>
+          <p>Try a page name, order, or customer.</p>
         </div>
       </div>
       <div class="command-footer">

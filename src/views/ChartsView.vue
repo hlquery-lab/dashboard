@@ -106,14 +106,14 @@ const capacity = [
       <div class="analytics-value">
         <strong>{{ weekly ? "$15.3M" : "$48.25M" }}</strong
         ><span class="badge green"><ArrowUpRight :size="14" />18.6%</span
-        ><small>CLP · Sample data</small>
+        ><small>USD · Sample data</small>
       </div>
       <WorkspaceChart
         :labels="labels"
         :datasets="revenue"
         :dark="dark"
         currency
-        label="Sample revenue comparison by period, in millions of CLP"
+        label="Sample revenue comparison by period, in millions of USD"
         :height="290"
       />
     </article>

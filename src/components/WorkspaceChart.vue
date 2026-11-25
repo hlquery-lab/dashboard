@@ -1,4 +1,5 @@
 <script setup>
+import { money } from "../utils/currency.js";
 import { ref, onMounted, onBeforeUnmount, watch } from "vue";
 import {
   Chart,
@@ -95,7 +96,10 @@ function render() {
           padding: 12,
           cornerRadius: 10,
           callbacks: props.currency
-            ? { label: (ctx) => `${ctx.dataset.label}: $${ctx.parsed.y}M CLP` }
+            ? {
+                label: (ctx) =>
+                  `${ctx.dataset.label}: ${money(ctx.parsed.y)} USD`,
+              }
             : {},
         },
       },
@@ -113,7 +117,15 @@ function render() {
               ticks: {
                 color: text,
                 maxTicksLimit: 5,
-                callback: (v) => (props.currency ? `$${v}M` : v),
+                callback: (v) =>
+                  props.currency
+                    ? new Intl.NumberFormat("en-US", {
+                        style: "currency",
+                        currency: "USD",
+                        notation: "compact",
+                        maximumFractionDigits: 1,
+                      }).format(v)
+                    : v,
               },
             },
           }

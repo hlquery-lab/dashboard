@@ -1,4 +1,5 @@
 <script setup>
+import { money } from "../utils/currency.js";
 import { computed, ref } from "vue";
 import { useStorage } from "@vueuse/core";
 import { Search, Plus, Download, Flag, NotebookPen, Files, UsersRound, Trash2, ArrowUpRight } from "lucide-vue-next";
@@ -26,7 +27,7 @@ function addNote() {
   search.value = "";
 }
 function download(project) {
-  const content = `${project.name}\nClient: ${project.client}\nStatus: ${project.status}\nProgress: ${project.progress}%\nDue date: ${project.date}\nTeam: ${project.members.join(", ")}\nBudget (CLP): ${project.budget}\n`;
+  const content = `${project.name}\nClient: ${project.client}\nStatus: ${project.status}\nProgress: ${project.progress}%\nDue date: ${project.date}\nTeam: ${project.members.join(", ")}\nBudget (USD): ${money(project.budget)}\n`;
   const url = URL.createObjectURL(new Blob([content], { type: "text/plain;charset=utf-8" }));
   const link = document.createElement("a");
   link.href = url;

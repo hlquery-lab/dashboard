@@ -16,7 +16,7 @@ const emit = defineEmits(["theme", "density", "navigation"]);
       <div class="card-header">
         <div>
           <span class="panel-kicker">MAKE IT FEEL LIKE YOURS</span>
-          <h2>Your workspace, your way.</h2>
+          <h2>Your store, your way.</h2>
           <p>A little comfort goes a long way.</p>
         </div>
         <Sun :size="21" class="muted" />

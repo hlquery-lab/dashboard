@@ -1,4 +1,5 @@
 <script setup>
+import { money } from "../utils/currency.js";
 import { invoices } from "../data/invoices.js";
 import { computed, ref } from "vue";
 import {
@@ -11,12 +12,6 @@ import {
 const query = ref(""),
   status = ref("All statuses"),
   selected = ref(null);
-const money = (amount) =>
-  new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "CLP",
-    maximumFractionDigits: 0,
-  }).format(amount);
 const filtered = computed(() =>
   invoices.filter(
     (i) =>
@@ -30,14 +25,14 @@ const headers = [
   { title: "Invoice", key: "id" },
   { title: "Client / project", key: "client" },
   { title: "Due date", key: "due" },
-  { title: "Amount (CLP)", key: "amount" },
+  { title: "Amount (USD)", key: "amount" },
   { title: "Status", key: "status" },
   { title: "", key: "actions", sortable: false },
 ];
 const tone = (s) =>
   s === "Paid" ? "success" : s === "Overdue" ? "error" : "warning";
 function download(invoice) {
-  const text = `DEMO INVOICE — SAMPLE DATA\n${invoice.id}\n\nClient: ${invoice.client}\nProject: ${invoice.project}\nIssued: ${invoice.date}\nDue: ${invoice.due}\nTotal: ${money(invoice.amount)} CLP\nStatus: ${invoice.status}\n\nFor demonstration only. This is not a tax invoice or payment request.\n`;
+  const text = `DEMO INVOICE — SAMPLE DATA\n${invoice.id}\n\nClient: ${invoice.client}\nProject: ${invoice.project}\nIssued: ${invoice.date}\nDue: ${invoice.due}\nTotal: ${money(invoice.amount)} USD\nStatus: ${invoice.status}\n\nFor demonstration only. This is not a tax invoice or payment request.\n`;
   const url = URL.createObjectURL(
     new Blob([text], { type: "text/plain;charset=utf-8" }),
   );
@@ -91,7 +86,7 @@ function download(invoice) {
             .reduce((sum, i) => sum + i.amount, 0),
         )
       }}</strong
-      ><small>CLP · Sample data</small>
+      ><small>USD · Sample data</small>
     </article>
   </section>
   <section class="card billing-table">
@@ -190,7 +185,7 @@ function download(invoice) {
             <dd>{{ selected.due }}</dd>
           </div>
           <div>
-            <dt>Total (CLP)</dt>
+            <dt>Total (USD)</dt>
             <dd class="invoice-total">{{ money(selected.amount) }}</dd>
           </div>
         </dl>

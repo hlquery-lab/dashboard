@@ -12,11 +12,14 @@ import { navigation } from "../data/navigation.js";
 const props = defineProps({
   page: String,
   compact: Boolean,
-  projectCount: Number,
-  completedCount: Number,
+  orderCount: Number,
+  deliveredCount: Number,
 });
 const emit = defineEmits(["navigate", "expand", "search"]);
-const expanded = useStorage("hlquery-navigation-groups", ["projects"]);
+const expanded = useStorage("hlquery-commerce-navigation-groups", [
+  "orders",
+  "catalog",
+]);
 const active = (item) =>
   item.page === props.page ||
   item.children?.some((child) => child.page === props.page);
@@ -90,10 +93,15 @@ function toggle(item) {
               ><component :is="item.icon" :size="18" /></span
             ><span class="nav-item-label">{{ item.label }}</span
             ><small
-              v-if="item.id === 'projects' && !compact"
+              v-if="item.id === 'orders' && !compact"
               class="nav-project-count"
-              >{{ projectCount }}</small
-            ><ChevronRight v-if="!compact" class="group-chevron" :size="14" aria-hidden="true" />
+              >{{ orderCount }}</small
+            ><ChevronRight
+              v-if="!compact"
+              class="group-chevron"
+              :size="14"
+              aria-hidden="true"
+            />
           </button>
           <div
             v-if="!compact && expanded.includes(item.id)"
@@ -110,9 +118,8 @@ function toggle(item) {
               :class="{ 'submenu-active': page === child.page }"
               :aria-current="page === child.page ? 'page' : undefined"
               @click.prevent="emit('navigate', child.page)"
-              ><span class="nav-child-bullet" aria-hidden="true"></span><span class="nav-item-label">{{
-                child.label
-              }}</span
+              ><span class="nav-child-bullet" aria-hidden="true"></span
+              ><span class="nav-item-label">{{ child.label }}</span
               ><span v-if="child.page === 'Board'" class="nav-child-tag"
                 >NEW</span
               ><ChevronRight
@@ -148,32 +155,28 @@ function toggle(item) {
     </section>
     <a
       v-if="!compact"
-      href="#Reports"
+      href="#Analytics"
       class="rail-pulse"
-      @click.prevent="emit('navigate', 'Reports')"
+      @click.prevent="emit('navigate', 'Analytics')"
     >
       <div class="rail-pulse-heading">
-        <ChartNoAxesCombined :size="15" /><span>Workspace pulse</span
+        <ChartNoAxesCombined :size="15" /><span>Order fulfillment</span
         ><ArrowUpRight :size="14" />
       </div>
       <div class="rail-pulse-value">
         <strong
-          >{{
-            projectCount
-              ? Math.round((completedCount / projectCount) * 100)
-              : 0
+          >{{ orderCount ? Math.round((deliveredCount / orderCount) * 100) : 0
           }}<small>%</small></strong
-        ><span>projects delivered</span>
+        ><span>orders delivered</span>
       </div>
       <div class="rail-pulse-track">
         <i
           :style="{
-            width:
-              (projectCount ? (completedCount / projectCount) * 100 : 0) + '%',
+            width: (orderCount ? (deliveredCount / orderCount) * 100 : 0) + '%',
           }"
         ></i>
       </div>
-      <p>{{ completedCount }} of {{ projectCount }} projects completed</p>
+      <p>{{ deliveredCount }} of {{ orderCount }} orders delivered</p>
     </a>
   </nav>
 </template>

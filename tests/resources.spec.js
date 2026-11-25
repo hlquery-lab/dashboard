@@ -1,44 +1,67 @@
 import { test, expect } from "@playwright/test";
-
-test("library notes persist, project files download, and team assignments open projects", async ({ page }) => {
-  const errors = [];
-  page.on("pageerror", error => errors.push(error.message));
-  await page.goto("/#Notes");
-  const nav = page.getByRole("navigation", { name: "Main navigation" });
-  await expect(nav.getByRole("button", { name: "Library", exact: true })).toHaveAttribute("aria-expanded", "true");
-  await page.getByLabel("Capture an idea", { exact: true }).fill("Launch checklist");
-  await page.getByLabel("Note content").fill("Review milestones with the team.");
-  await page.getByRole("button", { name: "Save note", exact: true }).click();
+import { openPage, createOrder } from "./helpers.js";
+test("catalog edits preserve historical order prices and inventory restocks persist", async ({
+  page,
+}) => {
+  await page.goto("/#Products");
+  await expect(page.locator(".c-product-card")).toHaveCount(8);
+  await page
+    .getByRole("button", { name: "Edit Everyday Canvas Tote", exact: true })
+    .click();
+  const editor = page.getByRole("dialog", { name: "Product editor" });
+  await editor.getByLabel("Price (USD)", { exact: true }).fill("52.25");
+  await editor.getByRole("button", { name: "Save product" }).click();
+  await expect(
+    page.locator(".c-product-card").filter({ hasText: "Everyday Canvas Tote" }),
+  ).toContainText("$52.25");
+  await openPage(page, "Orders");
+  await page.getByRole("button", { name: "#1048", exact: true }).click();
+  const detail = page.getByRole("dialog", { name: "Order details" });
+  await expect(detail.locator(".c-total-row")).toContainText("$120.00");
+  await detail.getByRole("button", { name: "Close order details" }).click();
+  await openPage(page, "Inventory");
+  await page
+    .getByLabel("Stock level", { exact: true })
+    .selectOption("Out of stock");
+  await expect(page.locator(".c-table tbody tr")).toHaveCount(1);
+  await page
+    .getByRole("button", { name: "Restock Daily Water Bottle", exact: true })
+    .click();
+  const stock = page.getByRole("dialog", { name: "Restock product" });
+  await stock.getByLabel("Units to add").fill("15");
+  await stock.getByRole("button", { name: "Add stock" }).click();
+  await expect(page.locator(".c-table tbody tr")).toHaveCount(0);
   await page.reload();
-  await expect(page.getByRole("heading", { name: "Launch checklist", exact: true })).toBeVisible();
-  await nav.getByRole("link", { name: "Project files", exact: true }).click();
-  const download = page.waitForEvent("download");
-  await page.getByRole("button", { name: "Download Platform redesign summary", exact: true }).click();
-  expect((await download).suggestedFilename()).toBe("platform-redesign-summary.txt");
-  await page.goto("/#Workload");
-  await page.locator(".assignment-list").getByRole("button", { name: "Platform redesign", exact: true }).first().click();
-  await expect(page.locator(".project-detail-dialog")).toBeVisible();
-  await page.getByRole("button", { name: "Done", exact: true }).click();
-  await page.goto("/#Milestones");
-  await expect(page.getByRole("progressbar")).toHaveCount(5);
-  await page.goto("/#Notes");
-  await page.getByRole("button", { name: "Delete note: Launch checklist", exact: true }).click();
-  await page.reload();
-  await expect(page.getByRole("heading", { name: "Room for your next idea", exact: true })).toBeVisible();
-  expect(errors).toEqual([]);
+  await page.getByLabel("Search products").fill("Daily Water Bottle");
+  await expect(
+    page.locator(".c-table tbody tr").locator("td").nth(3),
+  ).toHaveText("15");
 });
-
-test("new submenu pages fit mobile and expand from compact navigation", async ({ page }) => {
-  await page.goto("/#Notes");
-  await page.getByRole("button", { name: "Toggle compact navigation", exact: true }).click();
-  await page.getByRole("button", { name: "Library", exact: true }).click();
-  await expect(page.locator(".workspace")).not.toHaveClass(/compact/);
-  await expect(page.getByRole("link", { name: "Project files", exact: true })).toBeVisible();
-  await page.setViewportSize({ width: 390, height: 844 });
-  for (const name of ["Notes", "Files", "Milestones", "Workload"]) {
-    await page.goto(`/#${name}`);
-    await expect(page.locator("h1")).toHaveText(name);
-    await expect(page.locator(".resource-toolbar")).toBeVisible();
-    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
-  }
+test("new product supports cents, unique SKU, publication, and list filters", async ({
+  page,
+}) => {
+  await page.goto("/#Products");
+  await page.getByRole("button", { name: "Add product", exact: true }).click();
+  const dialog = page.getByRole("dialog", { name: "Product editor" });
+  await dialog
+    .getByLabel("Product name", { exact: true })
+    .fill("Travel Coffee Cup");
+  await dialog.getByLabel("SKU", { exact: true }).fill("BAG-001");
+  await dialog.getByLabel("Price (USD)").fill("28.95");
+  await dialog.getByLabel("Cost (USD)").fill("8.5");
+  await dialog.getByLabel("Stock quantity").fill("12");
+  await dialog.getByRole("button", { name: "Save product" }).click();
+  await expect(dialog.getByRole("alert")).toContainText("SKU already exists");
+  await dialog.getByLabel("SKU", { exact: true }).fill("CUP-009");
+  await dialog.getByLabel("Publication status").selectOption("Active");
+  await dialog.getByLabel("Product illustration").selectOption("mug");
+  await dialog.getByRole("button", { name: "Save product" }).click();
+  await page.getByLabel("Search products").fill("Travel Coffee");
+  await expect(page.locator(".c-product-card")).toHaveCount(1);
+  await expect(page.locator(".c-product-card")).toContainText("$28.95");
+  await page.getByRole("button", { name: "List view", exact: true }).click();
+  await expect(page.locator(".c-table tbody tr")).toHaveCount(1);
+  await page.reload();
+  await page.getByLabel("Search products").fill("CUP-009");
+  await expect(page.locator(".c-product-card")).toHaveCount(1);
 });

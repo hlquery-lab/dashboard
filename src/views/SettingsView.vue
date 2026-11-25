@@ -18,8 +18,8 @@ const props = defineProps({
   dense: Boolean,
   contentWidth: Number,
   cardRadius: Number,
-  projectCount: Number,
-  completedCount: Number,
+  orderCount: Number,
+  deliveredCount: Number,
 });
 const emit = defineEmits([
   "update:name",
@@ -32,20 +32,20 @@ const emit = defineEmits([
   "appearance",
 ]);
 const completion = computed(() =>
-  props.projectCount
-    ? Math.round((props.completedCount / props.projectCount) * 100)
+  props.orderCount
+    ? Math.round((props.deliveredCount / props.orderCount) * 100)
     : 0,
 );
 </script>
 
 <template>
-  <section class="preferences-layout" aria-label="Workspace settings">
+  <section class="preferences-layout" aria-label="Store settings">
     <div class="preferences-main">
       <div class="preferences-banner">
         <span class="preferences-banner-icon"><Settings2 :size="24" /></span>
         <div>
           <span class="panel-kicker">YOUR SPACE, YOUR RULES</span>
-          <h2>A workspace that fits you.</h2>
+          <h2>A store that fits you.</h2>
           <p>Fine-tune the details. Find your flow.</p>
         </div>
         <Sparkles :size="32" class="preferences-sparkle" aria-hidden="true" />
@@ -54,13 +54,13 @@ const completion = computed(() =>
         <header class="preferences-section-title">
           <span class="preferences-icon"><Settings2 :size="19" /></span>
           <div>
-            <h2>Workspace details</h2>
+            <h2>Store details</h2>
             <p>A familiar name for your everyday work.</p>
           </div>
           <span class="preferences-step">01</span>
         </header>
         <label class="preferences-name"
-          >Workspace name<input
+          >Store name<input
             :value="name"
             required
             maxlength="40"
@@ -87,7 +87,7 @@ const completion = computed(() =>
             {
               id: 'content-width',
               label: 'Content width',
-              detail: 'Set how wide your workspace can grow.',
+              detail: 'Set how wide your store can grow.',
               value: contentWidth,
               min: 1100,
               max: 1800,
@@ -214,30 +214,30 @@ const completion = computed(() =>
         </button>
       </article>
       <article class="card preferences-panel preferences-snapshot">
-        <span class="panel-kicker">WORKSPACE SNAPSHOT</span>
+        <span class="panel-kicker">STORE SNAPSHOT</span>
         <h2>Small steps. Real progress.</h2>
-        <p>Your project activity at a glance.</p>
+        <p>Your store activity at a glance.</p>
         <div class="preferences-stats">
           <div>
-            <strong>{{ projectCount }}</strong
-            ><span>Total projects</span>
+            <strong>{{ orderCount }}</strong
+            ><span>Total orders</span>
           </div>
           <div>
-            <strong>{{ completedCount }}</strong
-            ><span>Completed</span>
+            <strong>{{ deliveredCount }}</strong
+            ><span>Delivered</span>
           </div>
         </div>
         <div class="preferences-meter-label">
-          <span>Projects completed</span><strong>{{ completion }}%</strong>
+          <span>Orders delivered</span><strong>{{ completion }}%</strong>
         </div>
-        <progress :value="completion" max="100" aria-label="Projects completed">
+        <progress :value="completion" max="100" aria-label="Orders delivered">
           {{ completion }}%
         </progress>
         <div class="preferences-tip">
           <Sparkles :size="18" />
           <p>
-            Make room for your next great idea. Every completed project is a
-            step forward.
+            Make room for your next great idea. Every delivered order is a step
+            forward.
           </p>
         </div>
       </article>

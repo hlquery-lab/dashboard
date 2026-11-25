@@ -1,69 +1,28 @@
-<div align="center">
-  <img src="public/logo.png" alt="HLQuery logo" width="132">
-</div>
+# HLQuery Ecommerce Dashboard
 
-<div align="center">
+A working ecommerce demo for **Everyday Supply**, a store selling everyday essentials. Built with Vue 3, Vuetify, Chart.js, and Vite.
 
-**A flexible workspace for projects, teams, and business metrics.**
-
-[![Demo](https://img.shields.io/badge/Demo-live-1976d3?logo=google-chrome&logoColor=white&labelColor=101d2e)](https://dashboard.hlquery.com)
-[![Vue](https://img.shields.io/badge/Vue-3-42b883?logo=vuedotjs&logoColor=white&labelColor=101d2e)](https://vuejs.org/)
-[![Vuetify](https://img.shields.io/badge/Vuetify-4-1867c0?logo=vuetify&logoColor=white&labelColor=101d2e)](https://vuetifyjs.com/)
-[![Vite](https://img.shields.io/badge/Vite-8-646cff?logo=vite&logoColor=white&labelColor=101d2e)](https://vite.dev/)
-
-</div>
-
-> Explore the live dashboard at [dashboard.hlquery.com](https://dashboard.hlquery.com).
-
-### Overview
-
-HLQuery Dashboard brings projects, reporting, schedules, and team activity together in one responsive workspace. Use the interactive views to organize work and get a clear picture of what is moving forward.
-
-### Features
-
-- Track projects in a searchable list, a drag-and-drop board, or a calendar.
-- Review business metrics with interactive charts and reports.
-- Keep up with team members, project updates, invoices, and payment records.
-- Adjust the workspace with light and dark themes, compact tables, and compact navigation.
-- Jump between pages and projects with `Ctrl+K` or `⌘K`.
-- Use the dashboard on desktop, tablet, and mobile.
-
-### Quick start
-
-Requires Node.js and npm.
+## Run locally
 
 ```bash
-git clone https://github.com/hlquery-lab/dashboard.git
-cd dashboard
 npm install
 npm run dev
 ```
 
-Vite serves the local dashboard at [http://localhost:5174](http://localhost:5174).
+The dashboard runs at http://localhost:5174. `npm run build` creates `dist/`; `npm test` runs the Playwright browser tests. Install the browser with `npx playwright install chromium` if necessary.
 
-### Commands
+## Store workflows
 
-| Command | Description |
-| --- | --- |
-| `npm run dev` | Start the local development server. |
-| `npm run build` | Create a production build in `dist/`. |
-| `npm run preview` | Preview the production build locally. |
-| `npm test` | Run the Playwright browser tests. |
-| `npm run test:ui` | Open the Playwright test runner. |
+- **Overview and analytics:** sales, order volume, average order value, units sold, best sellers, category and channel revenue, and inventory alerts. Reporting periods use the sample date of November 23, 2026. Financial metrics count paid, non-cancelled orders.
+- **Orders and fulfillment:** search, filter, paginate, export, create orders, apply discounts, and move paid orders through packing, shipping, and delivery. Pending payments must be marked paid before fulfillment. Cancelling an unshipped order restores inventory; its payment becomes Refunded or Voided.
+- **Products and inventory:** create and edit products, unique SKUs, USD prices with cents, publication status, product illustrations, stock levels, and restocking. Draft, archived, and out-of-stock products cannot be added to a new order.
+- **Customers:** customer profiles, saved addresses, purchase histories, returning-customer segments, and lifetime paid sales.
+- **Discounts:** create percentage codes with an optional minimum order subtotal; activate or pause them. A code is validated before an order is created.
+- **Invoices and payments:** financial totals and CSV exports share the order records. Download itemized sample invoices. Order line prices are captured at checkout and survive later catalog changes.
+- **Store settings:** store name, light/dark theme, compact tables/navigation, card corners, and content width. Ctrl/Cmd+K searches pages and orders.
 
-### Built with
+## Demo data
 
-Vue 3, Vuetify 4, Vite, Chart.js, Vue Draggable, VueUse, AutoAnimate, and Lucide icons.
+Commerce records are stored under `hlquery-commerce-v1` in this browser's localStorage. The old project demo's records are preserved separately. All amounts are USD. New sample orders use the fixed reference date, so reporting stays consistent.
 
-### Demo data
-
-Projects and preferences are stored in the current browser. Financial figures, invoices, team members, and initial activity are illustrative demo data. The demo does not include authentication, a backend API, cross-device sync, or payment processing.
-
-### Run browser tests
-
-Install Chromium for Playwright, then run the test suite:
-
-```bash
-npx playwright install chromium
-npm test
-```
+The demo has no backend, authentication, live storefront, payment processing, email delivery, tax calculation, or shipping integration. Payment, refund, and fulfillment actions change demo records only. Shipping is free in the example checkout; downloaded invoices are sample documents.

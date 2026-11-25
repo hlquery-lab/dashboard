@@ -1,4 +1,5 @@
 <script setup>
+import { money } from "../utils/currency.js";
 import { computed, ref } from "vue";
 import { useStorage } from "@vueuse/core";
 import {
@@ -88,12 +89,6 @@ const progress = computed(() =>
 const budget = computed(() =>
   props.projects.reduce((sum, project) => sum + project.budget, 0),
 );
-const money = (value) =>
-  new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "CLP",
-    maximumFractionDigits: 0,
-  }).format(value);
 const goals = computed(() => [
   {
     name: "Deliver the portfolio",

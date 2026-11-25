@@ -1137,9 +1137,15 @@
   }
 }
 
-/* Metronic-style aside: quiet surfaces, clear hierarchy, and one blue accent. */
+/* Metronic-style aside: neutral slate, readable labels, and one blue accent. */
 .workspace .sidebar {
-  background: #1c1c28;
+  --sidebar-surface: #2b3038;
+  --sidebar-raised: #343a43;
+  --sidebar-text: #e2e5e9;
+  --sidebar-muted: #b0b7c2;
+  --sidebar-icon: #a6afbc;
+  --sidebar-active: #9dcaff;
+  background: var(--sidebar-surface);
   border-right: 1px solid #ffffff06;
   padding: 23px 16px 0;
 }
@@ -1159,24 +1165,28 @@
 }
 .workspace .sidebar .workspace-switch {
   margin-bottom: 18px;
-  background: #232332;
+  background: var(--sidebar-raised);
   border: 1px solid #ffffff08;
   border-radius: 9px;
   min-height: 61px;
   padding: 11px;
   box-shadow: none;
 }
+.workspace .sidebar .workspace-switch:hover {
+  background: #3b424c;
+  border-color: #ffffff21;
+}
 .workspace .sidebar .workspace-symbol {
-  background: #333049;
+  background: #3b4d63;
   border-color: #ffffff06;
-  color: #c0afff;
+  color: #afd3ff;
   box-shadow: none;
 }
-.workspace .sidebar .workspace-copy strong { color: #e0e0eb; font-size: 11px; font-weight: 600; }
-.workspace .sidebar .workspace-copy small { color: #9292a8; font-size: 10px; }
+.workspace .sidebar .workspace-copy strong { color: var(--sidebar-text); font-size: 11px; font-weight: 600; }
+.workspace .sidebar .workspace-copy small { color: var(--sidebar-muted); font-size: 10px; }
 .workspace .sidebar .sidebar-navigation {
   padding-bottom: 16px;
-  scrollbar-color: #3b3b50 transparent;
+  scrollbar-color: #58616e transparent;
   scrollbar-gutter: stable;
 }
 .workspace .sidebar .rail-search {
@@ -1185,14 +1195,14 @@
   padding: 0 11px;
   background: #ffffff03;
   border: 1px solid #ffffff0a;
-  color: #9292aa;
+  color: #c3c9d2;
   border-radius: 7px;
   font-size: 11px;
 }
-.workspace .sidebar .rail-search kbd { color: #85859d; border-color: #ffffff0c; }
+.workspace .sidebar .rail-search kbd { color: var(--sidebar-icon); border-color: #ffffff0c; }
 .workspace .sidebar .navigation-section + .navigation-section { margin-top: 26px; }
 .workspace .sidebar .navigation-caption {
-  color: #808098;
+  color: var(--sidebar-muted);
   margin: 0 12px 9px;
   font-size: 9px;
   font-weight: 600;
@@ -1205,8 +1215,8 @@
   min-height: 41px;
   padding-inline: 11px;
   gap: 11px;
-  color: #b4b4c8;
-  font-size: 12px;
+  color: var(--sidebar-text);
+  font-size: 13px;
   font-weight: 500;
   border-radius: 7px;
   background: transparent;
@@ -1218,30 +1228,30 @@
   border-radius: 0;
   background: transparent;
   box-shadow: none;
-  color: #85859d;
+  color: var(--sidebar-icon);
 }
 .workspace .sidebar .sidebar-navigation svg { stroke-width: 1.65; }
 .workspace .sidebar .sidebar-navigation :is(.nav-group-trigger, .nav-direct-link):hover {
-  color: #f4f4fa;
+  color: #ffffff;
   background: #ffffff05;
 }
 .workspace .sidebar .sidebar-navigation .nav-group-trigger.group-active {
-  color: #f0f0f8;
+  color: #ffffff;
   background: transparent;
 }
 .workspace .sidebar .group-active .nav-icon,
-.workspace .sidebar .direct-active .nav-icon { color: #6ea8ff; background: transparent; box-shadow: none; }
+.workspace .sidebar .direct-active .nav-icon { color: var(--sidebar-active); background: transparent; box-shadow: none; }
 .workspace .sidebar .sidebar-navigation .nav-direct-link.direct-active {
   color: #fff;
-  background: #2a3047;
+  background: #374b63;
   box-shadow: none;
   font-weight: 550;
 }
 .workspace .sidebar .sidebar-navigation .nav-direct-link.direct-active::before { display: none; }
-.workspace .sidebar .group-chevron { color: #85859d; opacity: 1; width: 13px; }
-.workspace .sidebar .group-active .group-chevron { color: #c4c4d8; }
+.workspace .sidebar .group-chevron { color: var(--sidebar-icon); opacity: 1; width: 13px; }
+.workspace .sidebar .group-active .group-chevron { color: var(--sidebar-text); }
 .workspace .sidebar .nav-project-count {
-  color: #a7a7bf;
+  color: var(--sidebar-muted);
   background: #ffffff06;
   font-size: 9px;
   border: 1px solid #ffffff08;
@@ -1260,12 +1270,12 @@
   background: #ffffff0a;
 }
 .workspace .sidebar .sidebar-navigation .nav-submenu a {
-  color: #9898b0;
+  color: #c3c9d2;
   min-height: 35px;
   padding: 7px 10px;
   margin: 2px 0;
   gap: 11px;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 450;
   border-radius: 6px;
   background: transparent;
@@ -1276,29 +1286,29 @@
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #62627d;
+  background: #919ba9;
   flex-shrink: 0;
   transition: background 160ms ease, box-shadow 160ms ease;
 }
-.workspace .sidebar .sidebar-navigation .nav-submenu a:hover { color: #e5e5f1; background: #ffffff04; }
+.workspace .sidebar .sidebar-navigation .nav-submenu a:hover { color: #ffffff; background: #ffffff04; }
 .workspace .sidebar .sidebar-navigation .nav-submenu a.submenu-active {
-  color: #7eb1ff;
-  background: #2884ff12;
+  color: var(--sidebar-active);
+  background: #9dcaff14;
   box-shadow: none;
   font-weight: 550;
 }
 .workspace .sidebar .sidebar-navigation .nav-submenu a.submenu-active::before { display: none; }
-.submenu-active .nav-child-bullet { background: #6ea8ff; box-shadow: 0 0 0 3px #6ea8ff10; }
-.workspace .sidebar .nav-selection-chevron { width: 12px; color: #7eb1ff; }
+.submenu-active .nav-child-bullet { background: var(--sidebar-active); box-shadow: 0 0 0 3px #9dcaff10; }
+.workspace .sidebar .nav-selection-chevron { width: 12px; color: var(--sidebar-active); }
 .workspace .sidebar .nav-child-tag {
-  color: #a698dd;
+  color: #afd3ff;
   border: 0;
-  background: #a78bfa10;
+  background: #9dcaff14;
   font-size: 7px;
   font-weight: 600;
   padding: 3px 5px;
 }
-.workspace .sidebar .nav-badge { color: #9696ae; background: #ffffff06; font-size: 7px; padding: 3px 5px; }
+.workspace .sidebar .nav-badge { color: var(--sidebar-muted); background: #ffffff06; font-size: 7px; padding: 3px 5px; }
 .workspace .sidebar .nav-badge.badge-new { color: #67cbb1; background: #67cbb10e; }
 .workspace .sidebar .rail-pulse {
   margin: 27px 3px 0;
@@ -1307,12 +1317,12 @@
   border-color: #ffffff0a;
   border-radius: 9px;
 }
-.workspace .sidebar .rail-pulse-heading { color: #a4a4bc; font-size: 10px; }
-.workspace .sidebar .rail-pulse-value strong { color: #dcdce9; font-size: 23px; }
+.workspace .sidebar .rail-pulse-heading { color: #c3c9d2; font-size: 10px; }
+.workspace .sidebar .rail-pulse-value strong { color: #f5f6f8; font-size: 23px; }
 .workspace .sidebar .rail-pulse-value > span,
-.workspace .sidebar .rail-pulse p { color: #85859d; }
+.workspace .sidebar .rail-pulse p { color: var(--sidebar-icon); }
 .workspace .sidebar .rail-pulse-track { height: 3px; }
-.workspace .sidebar .rail-pulse-track i { background: #6b9ef2; }
+.workspace .sidebar .rail-pulse-track i { background: #89bcff; }
 .workspace .sidebar .sidebar-bottom {
   padding-top: 12px;
   border-top: 1px solid #ffffff09;
@@ -1325,17 +1335,17 @@
   padding: 11px 12px;
   border: 1px solid #ffffff0d;
   border-radius: 7px;
-  background: #292939;
-  color: #d6d6e6;
+  background: var(--sidebar-raised);
+  color: var(--sidebar-text);
   font-size: 11px;
   font-weight: 500;
   text-align: left;
   transition: background 160ms ease;
 }
-.sidebar-create:hover { background: #333347; }
-.sidebar-create > svg { color: #9c9cb6; }
-.workspace .sidebar .back-site { color: #9292a9; font-size: 10px; padding-inline: 12px; margin-block: 7px; }
-.workspace .sidebar .sidebar-footer { color: #85859d; border-color: #ffffff09; font-size: 9px; padding-block: 14px; }
+.sidebar-create:hover { background: #404852; }
+.sidebar-create > svg { color: #c3c9d2; }
+.workspace .sidebar .back-site { color: var(--sidebar-muted); font-size: 10px; padding-inline: 12px; margin-block: 7px; }
+.workspace .sidebar .sidebar-footer { color: var(--sidebar-icon); border-color: #ffffff09; font-size: 9px; padding-block: 14px; }
 .workspace.compact .sidebar .brand { margin-inline: 0; padding-bottom: 17px; }
 .workspace.compact .sidebar .sidebar-navigation :is(.nav-group-trigger, .nav-direct-link) { padding: 0; width: 44px; }
 .workspace.compact .sidebar .rail-search { width: 44px; }

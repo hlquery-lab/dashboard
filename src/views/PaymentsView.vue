@@ -1,4 +1,5 @@
 <script setup>
+import { money } from "../utils/currency.js";
 import { computed } from "vue";
 import {
   ArrowDownLeft,
@@ -11,16 +12,10 @@ import { invoices } from "../data/invoices.js";
 const emit = defineEmits(["invoices"]);
 const paid = invoices.filter((i) => i.status === "Paid");
 const total = computed(() => paid.reduce((sum, i) => sum + i.amount, 0));
-const money = (amount) =>
-  new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "CLP",
-    maximumFractionDigits: 0,
-  }).format(amount);
 function download() {
   const rows = [
-    ["Invoice", "Client", "Amount CLP", "Status"],
-    ...paid.map((i) => [i.id, i.client, i.amount, i.status]),
+    ["Invoice", "Client", "Amount USD", "Status"],
+    ...paid.map((i) => [i.id, i.client, i.amount.toFixed(2), i.status]),
   ];
   const csv = rows
     .map((row) =>
@@ -43,7 +38,7 @@ function download() {
       <span class="balance-icon"><Wallet :size="25" /></span
       ><span class="balance-eyebrow">PAYMENTS RECEIVED</span>
       <h2>{{ money(total) }}</h2>
-      <p>CLP · Sample billing data</p>
+      <p>USD · Sample billing data</p>
       <div class="balance-bottom">
         <span><Check :size="15" />{{ paid.length }} sample invoices paid</span
         ><button @click="emit('invoices')">
@@ -83,7 +78,7 @@ function download() {
       </div>
       <div class="transaction-total">
         <strong>+{{ money(invoice.amount) }}</strong
-        ><span>Received · CLP</span>
+        ><span>Received · USD</span>
       </div>
     </div>
     <div class="payment-sample-note">

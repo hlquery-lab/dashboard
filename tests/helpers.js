@@ -1,25 +1,14 @@
 export async function openPage(page, name) {
   const parents = {
-    Projects: "Projects",
-    Board: "Projects",
-    Calendar: "Projects",
-    Reports: "Analytics",
-    Charts: "Analytics",
-    Team: "Workspace",
-    Activity: "Workspace",
-    Billing: "Billing",
-    Payments: "Billing",
+    Orders: "Orders",
+    Fulfillment: "Orders",
+    Products: "Catalog",
+    Inventory: "Catalog",
     Settings: "Settings",
     Appearance: "Settings",
   };
   const labels = {
-    Projects: "All projects",
-    Board: "Board view",
-    Reports: "Performance report",
-    Charts: "Chart gallery",
-    Team: "Team members",
-    Activity: "Activity feed",
-    Billing: "Invoices",
+    Orders: "All orders",
     Settings: "General",
     Help: "Help center",
   };
@@ -34,5 +23,31 @@ export async function openPage(page, name) {
   }
   await sidebar
     .getByRole("link", { name: labels[name] || name, exact: true })
+    .click();
+}
+export async function downloadText(download) {
+  const stream = await download.createReadStream();
+  const chunks = [];
+  for await (const chunk of stream) chunks.push(chunk);
+  return Buffer.concat(chunks).toString("utf8");
+}
+export async function createOrder(
+  page,
+  { quantity = "2", payment = "Paid", discount = "" } = {},
+) {
+  await page
+    .getByRole("button", { name: "Create order", exact: true })
+    .first()
+    .click();
+  const dialog = page.getByRole("dialog", { name: "Create order" });
+  await dialog.getByLabel("Customer", { exact: true }).selectOption("c1");
+  await dialog.getByLabel("Qty", { exact: true }).fill(quantity);
+  await dialog
+    .getByLabel("Payment status", { exact: true })
+    .selectOption(payment);
+  if (discount)
+    await dialog.getByLabel("Discount code", { exact: true }).fill(discount);
+  await dialog
+    .getByRole("button", { name: "Create order", exact: true })
     .click();
 }

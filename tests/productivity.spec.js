@@ -1,64 +1,72 @@
 import { test, expect } from "@playwright/test";
-
-test("sidebar destinations, client projects, and personal goals stay connected", async ({
+import { openPage } from "./helpers.js";
+test("customers share order history and store new profiles", async ({
   page,
 }) => {
-  const errors = [];
-  page.on("pageerror", (error) => errors.push(error.message));
-  await page.goto("/");
-  const nav = page.getByRole("navigation", { name: "Main navigation" });
-  await nav.getByRole("link", { name: "My tasks", exact: true }).click();
+  await page.goto("/#Customers");
+  await page.getByLabel("Search customers").fill("Olivia");
+  await expect(page.locator(".c-table tbody tr")).toHaveCount(1);
+  await expect(page.locator(".c-table tbody tr")).toContainText("$264.00");
   await page
-    .getByLabel("New task", { exact: true })
-    .fill("Prepare the customer review");
-  await page.getByRole("button", { name: "Add task", exact: true }).click();
-  await page
-    .getByRole("checkbox", { name: "Prepare the customer review", exact: true })
-    .check();
-  await page.reload();
-  await expect(
-    page.getByRole("checkbox", {
-      name: "Prepare the customer review",
-      exact: true,
-    }),
-  ).toBeChecked();
-  await nav.getByRole("link", { name: "Goals & targets", exact: true }).click();
-  await expect(
-    page.locator(".goal-card").filter({ hasText: "Clear your checklist" }),
-  ).toContainText("2 / 5");
-  await nav.getByRole("link", { name: "Clients", exact: true }).click();
-  await page.getByLabel("Search clients").fill("Acme");
-  await expect(page.locator(".client-card")).toHaveCount(1);
-  await page
-    .getByRole("button", { name: "Platform redesign", exact: true })
+    .getByRole("button", { name: "View customer Olivia Martin" })
     .click();
-  await expect(page.locator(".project-detail-dialog")).toBeVisible();
+  const detail = page.getByRole("dialog", { name: "Customer details" });
+  await expect(detail.locator(".c-table tbody tr")).toHaveCount(2);
+  await detail.getByRole("button", { name: "#1048", exact: true }).click();
+  await expect(
+    page.getByRole("dialog", { name: "Order details" }),
+  ).toContainText("$120.00");
+  await page.getByRole("button", { name: "Close order details" }).click();
+  await page.getByRole("button", { name: "Add customer", exact: true }).click();
+  const editor = page.getByRole("dialog", { name: "Customer editor" });
+  await editor.getByLabel("Customer name").fill("Isabella Walker");
+  await editor
+    .getByLabel("Email", { exact: true })
+    .fill("isabella@example.com");
+  await editor.getByLabel("City", { exact: true }).fill("Phoenix");
+  await editor.getByRole("button", { name: "Save customer" }).click();
+  await expect(
+    page.getByRole("dialog", { name: "Customer details" }),
+  ).toContainText("Isabella Walker");
   await page.getByRole("button", { name: "Done", exact: true }).click();
-  await nav
-    .getByRole("button", { name: "Search navigation", exact: true })
-    .click();
-  await page.getByLabel("Search pages and projects").fill("Goals");
-  await page.getByLabel("Search pages and projects").press("Enter");
-  await expect(page.locator("h1")).toHaveText("Goals");
-  expect(errors).toEqual([]);
+  await page.reload();
+  await page.getByLabel("Search customers").fill("Isabella");
+  await expect(page.locator(".c-table tbody tr")).toContainText("No orders");
 });
-
-test("new navigation works in compact mode and on mobile", async ({ page }) => {
-  await page.goto("/#Clients");
+test("discounts can be created, applied, and paused", async ({ page }) => {
+  await page.goto("/#Discounts");
   await page
-    .getByRole("button", { name: "Toggle compact navigation", exact: true })
+    .getByRole("button", { name: "Create discount", exact: true })
     .click();
-  await page.getByRole("link", { name: "My tasks", exact: true }).click();
-  await expect(page.locator("h1")).toHaveText("Tasks");
-  await page.setViewportSize({ width: 390, height: 844 });
-  await page.getByRole("button", { name: "Open menu", exact: true }).click();
+  const dialog = page.getByRole("dialog", { name: "Create discount" });
+  await dialog.getByLabel("Discount code", { exact: true }).fill("HELLO20");
+  await dialog.getByLabel("Percentage off").fill("20");
+  await dialog.getByLabel("Minimum order (USD)").fill("25");
+  await dialog
+    .getByRole("button", { name: "Create discount", exact: true })
+    .click();
+  await openPage(page, "Orders");
   await page
-    .getByRole("link", { name: "Goals & targets", exact: true })
+    .getByRole("button", { name: "Create order", exact: true })
+    .first()
     .click();
-  await expect(page.locator("h1")).toHaveText("Goals");
-  expect(
-    await page.evaluate(
-      () => document.documentElement.scrollWidth <= innerWidth,
-    ),
-  ).toBe(true);
+  const editor = page.getByRole("dialog", { name: "Create order" });
+  await editor.getByLabel("Customer", { exact: true }).selectOption("c1");
+  await editor.getByLabel("Discount code", { exact: true }).fill("HELLO20");
+  await editor
+    .getByRole("button", { name: "Create order", exact: true })
+    .click();
+  await expect(
+    page.getByRole("dialog", { name: "Order details" }),
+  ).toContainText("$38.40");
+  await page.getByRole("button", { name: "Close order details" }).click();
+  await openPage(page, "Discounts");
+  const row = page.getByRole("row").filter({ hasText: "HELLO20" });
+  await expect(row).toContainText("1 orders");
+  await page
+    .getByRole("button", { name: "Pause HELLO20", exact: true })
+    .click();
+  await expect(row).toContainText("Paused");
+  await page.reload();
+  await expect(row).toContainText("Paused");
 });
