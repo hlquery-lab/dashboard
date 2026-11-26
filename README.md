@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="public/logo.png" alt="hlquery logo" width="200">
+  <img src="public/logo.png" alt="hlquery logo" width="140">
 </div>
 
 <div align="center">
@@ -13,7 +13,7 @@
 [![Vite](https://img.shields.io/badge/Vite-Build-646cff?logo=vite&logoColor=white&labelColor=000000)](https://vite.dev/)
 [![Dashboard](https://img.shields.io/badge/Dashboard-Local%20demo-0ea5e9?logo=chartdotjs&logoColor=white&labelColor=000000)](http://localhost:5174)
 
-[Project overview](../README.md) · [Landing](../landing/README.md) · [Getting started](#getting-started) · [Store workflows](#store-workflows)
+[Getting started](#getting-started) · [Store workflows](#store-workflows) · [Demo data](#demo-data) · [Development](#development-commands)
 
 </div>
 
@@ -26,14 +26,12 @@ The HLQuery dashboard is a working ecommerce demo built with **Vue 3, Vuetify, C
 
 ### Getting started
 
-From `dash/`:
+From the dashboard directory:
 
 ```bash
 npm install
 npm run dev
 ```
-
-To start both applications, run `./etc/scripts/x2` from the repository root.
 
 ### Store workflows
 
@@ -92,7 +90,7 @@ Shipping is free in the example checkout. Downloaded invoices are sample documen
 
 ### Development commands
 
-Run these commands from `dash/`:
+Run these commands from the dashboard directory:
 
 | Command | Description |
 | --- | --- |
@@ -114,5 +112,5 @@ Set `VITE_LANDING_URL` before building to configure the link back to the public 
 
 ### Related documentation
 
-- 🏠 [Project overview](../README.md)
-- 🌐 [Landing documentation](../landing/README.md)
+- 📖 [HLQuery guides](https://guides.hlquery.com/)
+- 🌐 [HLQuery website](https://www.hlquery.com)
