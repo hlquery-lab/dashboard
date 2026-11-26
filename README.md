@@ -11,14 +11,14 @@
 [![Follow hlquery](https://img.shields.io/badge/Follow-%40hlquery-blue?logo=x&logoColor=white&labelColor=000000)](https://x.com/hlquery)
 [![Vue](https://img.shields.io/badge/Vue-3-42b883?logo=vuedotjs&logoColor=white&labelColor=000000)](https://vuejs.org/)
 [![Vite](https://img.shields.io/badge/Vite-Build-646cff?logo=vite&logoColor=white&labelColor=000000)](https://vite.dev/)
-[![Dashboard](https://img.shields.io/badge/Dashboard-Local%20demo-0ea5e9?logo=chartdotjs&logoColor=white&labelColor=000000)](http://localhost:5174)
+[![Dashboard](https://img.shields.io/badge/Dashboard-Live%20demo-0ea5e9?logo=chartdotjs&logoColor=white&labelColor=000000)](https://dashboard.hlquery.com/)
 
 [Getting started](#getting-started) · [Store workflows](#store-workflows) · [Demo data](#demo-data) · [Development](#development-commands)
 
 </div>
 
 > **Everyday Supply** is a sample store selling everyday essentials.
-> Start the development server to explore it at [localhost:5174](http://localhost:5174).
+> Explore it at [https://dashboard.hlquery.com/](https://dashboard.hlquery.com/).
 
 ### What is the dashboard?
 
