@@ -1,112 +1,118 @@
 <div align="center">
+  <img src="https://docs.hlquery.com/img/hlquery/2.png" alt="hlquery logo" width="200">
+</div>
 
-<img src="public/logo.png" alt="Logo de HLQuery" width="96" />
+<div align="center">
 
-# HLQuery · Dashboard
+**An interactive ecommerce dashboard built for exploring everyday store operations.**
 
-**Everyday Supply — tu tienda de ejemplo, de la venta a la entrega.**
+[![Website](https://img.shields.io/badge/Website-hlquery.com-blue?logo=google-chrome&logoColor=white&labelColor=000000)](https://www.hlquery.com)
+[![Docs](https://img.shields.io/badge/Docs-guides.hlquery.com-brightgreen?logo=readthedocs&logoColor=white&labelColor=000000)](https://guides.hlquery.com/)
+[![Follow hlquery](https://img.shields.io/badge/Follow-%40hlquery-blue?logo=x&logoColor=white&labelColor=000000)](https://x.com/hlquery)
+[![Vue](https://img.shields.io/badge/Vue-3-42b883?logo=vuedotjs&logoColor=white&labelColor=000000)](https://vuejs.org/)
+[![Vite](https://img.shields.io/badge/Vite-Build-646cff?logo=vite&logoColor=white&labelColor=000000)](https://vite.dev/)
+[![Dashboard](https://img.shields.io/badge/Dashboard-Local%20demo-0ea5e9?logo=chartdotjs&logoColor=white&labelColor=000000)](http://localhost:5174)
 
-Vue 3 · Vuetify · Chart.js · Vite · Lucide
-
-[🏠 Inicio](../README.md) · [🌐 Landing](../landing/README.md) · [🚀 Iniciar](#-iniciar) · [🛍️ Explorar](#-explora-la-tienda)
+[Project overview](../README.md) · [Landing](../landing/README.md) · [Getting started](#getting-started) · [Store workflows](#store-workflows)
 
 </div>
 
----
+> **Everyday Supply** is a sample store selling everyday essentials.
+> Start the development server to explore it at [localhost:5174](http://localhost:5174).
 
-## 🚀 Iniciar
+### What is the dashboard?
 
-Desde `dash/`:
+The HLQuery dashboard is a working ecommerce demo built with **Vue 3, Vuetify, Chart.js, Vite, and Lucide icons**. It connects store reporting, catalog management, customers, discounts, and fulfillment through shared sample order records.
+
+### Getting started
+
+From `dash/`:
 
 ```bash
 npm install
 npm run dev
 ```
 
-**[Abrir dashboard →](http://localhost:5174)** · Para iniciar también la landing, ejecuta `./etc/scripts/x2` desde la raíz.
+To start both applications, run `./etc/scripts/x2` from the repository root.
 
-## 🛍️ Explora la tienda
+### Store workflows
 
-| | Sección | Qué puedes hacer |
-| :---: | :--- | :--- |
-| 📈 | **Overview y analítica** | Consultar ventas, pedidos, ticket promedio, unidades vendidas, categorías, canales y productos destacados. |
-| 🛒 | **Pedidos** | Buscar, filtrar, paginar, exportar y crear pedidos con descuentos. |
-| 🚚 | **Preparación y entrega** | Registrar el pago y avanzar por preparación, envío y entrega. |
-| 📦 | **Productos e inventario** | Crear y editar productos, SKU únicos, precios con centavos, ilustraciones, publicación y reposiciones. |
-| 👥 | **Clientes** | Revisar perfiles, direcciones, historial de compras, clientes recurrentes y ventas pagadas acumuladas. |
-| 🏷️ | **Descuentos** | Crear códigos porcentuales con mínimo de compra opcional; activarlos o pausarlos. |
-| 🧾 | **Facturas y pagos** | Consultar totales, exportar CSV y descargar facturas de ejemplo con detalle de artículos. |
-| 🎨 | **Preferencias** | Cambiar nombre de tienda, tema claro/oscuro, tablas y navegación compactas, esquinas y ancho del contenido. |
+| Feature | Description |
+| --- | --- |
+| 📈 **Overview and analytics** | Sales, order volume, average order value, units sold, best sellers, category and channel revenue, and inventory alerts. |
+| 🛒 **Orders** | Search, filter, paginate, export, create orders, and apply discounts. |
+| 🚚 **Fulfillment** | Record payment and move orders through packing, shipping, and delivery. |
+| 📦 **Products and inventory** | Create and edit products, unique SKUs, USD prices with cents, illustrations, publication status, stock levels, and restocking. |
+| 👥 **Customers** | Profiles, saved addresses, purchase histories, returning-customer segments, and lifetime paid sales. |
+| 🏷️ **Discounts** | Percentage codes with an optional minimum order subtotal; activate or pause codes. |
+| 🧾 **Invoices and payments** | Financial totals, CSV exports, and downloadable itemized sample invoices. |
+| 🎨 **Store settings** | Store name, light/dark theme, compact tables and navigation, card corners, and content width. |
 
-**Encuentra lo que buscas:** `Ctrl+K` en Windows/Linux o `⌘K` en macOS abre la búsqueda de páginas y pedidos.
+**Quick search:** press `Ctrl+K` on Windows/Linux or `⌘K` on macOS to find pages and orders.
 
-## 🧭 Un recorrido para probar
+### Try an order from start to finish
 
-1. **Crea un producto** publicado, con precio y stock disponible.
-2. **Crea un pedido** con ese producto y, si quieres, un descuento activo.
-3. **Marca el pago** antes de comenzar la preparación.
-4. **Avanza el pedido** por preparación, envío y entrega.
-5. **Revisa sus resultados** en analítica y descarga su factura de ejemplo.
+1. Create a published product with a price and available stock.
+2. Create an order with that product and optionally apply an active discount.
+3. Mark the payment as paid before starting fulfillment.
+4. Move the order through packing, shipping, and delivery.
+5. Review the results in analytics and download its sample invoice.
 
 <details>
-<summary>📋 Reglas de pedidos, stock y descuentos</summary>
+<summary><strong>Order, inventory, and discount rules</strong></summary>
 
-- Los productos en borrador, archivados o sin stock no se pueden agregar a un pedido nuevo.
-- Los pagos pendientes deben marcarse como pagados antes de preparar el pedido.
-- Cancelar un pedido aún no enviado devuelve el stock y deja su pago como **Refunded** o **Voided**, según corresponda.
-- Los descuentos se validan antes de crear el pedido.
-- Los precios quedan guardados en las líneas del pedido: editar el catálogo después no cambia una compra anterior.
-- Las métricas financieras cuentan pedidos pagados y no cancelados.
+- Draft, archived, and out-of-stock products cannot be added to a new order.
+- Pending payments must be marked paid before fulfillment.
+- Cancelling an unshipped order restores inventory; its payment becomes **Refunded** or **Voided**, as appropriate.
+- Discount codes are validated before an order is created.
+- Order line prices are captured at checkout and survive later catalog changes.
+- Financial metrics count paid, non-cancelled orders.
 
 </details>
 
-## 💾 Datos de la demo
+### Demo data
 
-| Dato | Comportamiento |
-| :--- | :--- |
-| 💵 Moneda | Todos los importes están en USD. |
-| 📅 Fecha de referencia | 23 de noviembre de 2026, también para los nuevos pedidos de ejemplo. |
-| 🗃️ Persistencia | Los registros de comercio se guardan en `localStorage`, bajo `hlquery-commerce-v1`. |
-| 🧩 Datos anteriores | Los registros de la demo previa se conservan por separado. |
+| Setting | Behavior |
+| --- | --- |
+| Currency | All amounts are in USD. |
+| Reference date | November 23, 2026, including newly created sample orders. |
+| Commerce storage | Browser `localStorage`, under `hlquery-commerce-v1`. |
+| Previous demo records | Preserved separately from commerce records. |
 
-Los registros pertenecen al navegador que uses; borrar su almacenamiento elimina los cambios locales.
+Changes belong to the browser you use. Clearing its local storage removes locally saved changes.
 
 <details>
-<summary>🔎 Qué simula esta tienda</summary>
+<summary><strong>Demo scope</strong></summary>
 
-La demo funciona sin backend, autenticación ni tienda pública conectada. Los pagos, reembolsos y cambios de entrega modifican únicamente registros de ejemplo.
+The demo has no backend, authentication, live storefront, payment processing, email delivery, tax calculation, or shipping integration. Payment, refund, and fulfillment actions change demo records only.
 
-No procesa cobros, envía correos, calcula impuestos ni se integra con transportistas. El envío del checkout de ejemplo es gratis y las facturas descargadas son documentos de muestra.
+Shipping is free in the example checkout. Downloaded invoices are sample documents.
 
 </details>
 
-<details>
-<summary>🧪 Compilación y pruebas</summary>
+### Development commands
 
-Desde `dash/`:
+Run these commands from `dash/`:
 
-| Comando | Resultado |
-| :--- | :--- |
-| `npm run dev` | Servidor de desarrollo en el puerto 5174. |
-| `npm run build` | Compilación en `dist/`. |
-| `npm run preview` | Vista previa de la compilación en el puerto 4174. |
-| `npm test` | Pruebas de navegador con Playwright. |
-| `npm run test:ui` | Interfaz interactiva de Playwright. |
+| Command | Description |
+| --- | --- |
+| `npm run dev` | Start the development server on port 5174. |
+| `npm run build` | Create the production build in `dist/`. |
+| `npm run preview` | Preview the build on port 4174. |
+| `npm test` | Run Playwright browser tests. |
+| `npm run test:ui` | Open the interactive Playwright test interface. |
 
-Si necesitas instalar el navegador de pruebas:
+Install the test browser if needed:
 
 ```bash
 npx playwright install chromium
 ```
 
-Para cambiar el enlace de regreso a la landing, configura `VITE_LANDING_URL` antes de compilar. Consulta [.env.example](.env.example).
+### Configuration
 
-</details>
+Set `VITE_LANDING_URL` before building to configure the link back to the public website. See [.env.example](.env.example).
 
----
+### Related documentation
 
-<div align="center">
-
-[⬅ Volver al proyecto](../README.md) · [🌐 Ver la landing](../landing/README.md)
-
-</div>
+- 🏠 [Project overview](../README.md)
+- 🌐 [Landing documentation](../landing/README.md)
