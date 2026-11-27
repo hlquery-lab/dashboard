@@ -1,0 +1,160 @@
+/* Account menu, following the compact profile controls in NextEdu. */
+.workspace .topbar .profile {
+  min-height: 48px;
+  padding: 5px 9px 5px 5px;
+  gap: 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--canvas);
+  transition: background 160ms ease, border-color 160ms ease;
+}
+.workspace .topbar .profile:hover,
+.workspace .topbar .profile[aria-expanded="true"] {
+  background: var(--hover);
+  border-color: color-mix(in srgb, var(--primary) 25%, var(--line));
+}
+.workspace .account-anchor .profile-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #284a65;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 650;
+}
+.workspace .topbar .profile-copy small {
+  margin-top: 2px;
+  font-size: 10px;
+}
+.workspace .topbar .profile > svg {
+  box-sizing: content-box;
+  margin-left: 4px;
+  padding: 5px;
+  border-radius: 50%;
+  background: var(--surface);
+  transition: transform 160ms ease;
+}
+.workspace .topbar .profile[aria-expanded="true"] > svg {
+  transform: rotate(180deg);
+}
+.workspace .profile-popover {
+  position: absolute;
+  top: calc(100% + 10px);
+  width: 256px;
+  padding: 6px;
+  overflow: hidden;
+  border-radius: 14px;
+  box-shadow: 0 6px 14px #131b3008, 0 18px 48px #131b301a;
+  transform-origin: top right;
+}
+.workspace .profile-popover-user {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 12px 10px 15px;
+  margin-bottom: 5px;
+  border-bottom: 1px solid var(--line);
+}
+.workspace .profile-popover-user strong {
+  display: block;
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 1.5;
+}
+.workspace .profile-popover-user small {
+  margin-top: 2px;
+  font-size: 11px;
+}
+.workspace .profile-popover-links {
+  display: grid;
+  gap: 2px;
+}
+.workspace .profile-popover button {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  min-height: 42px;
+  margin: 0;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 8px;
+  color: var(--muted);
+  background: transparent;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 500;
+  transition: background 140ms ease, color 140ms ease;
+}
+.workspace .profile-popover button > span {
+  flex: 1;
+}
+.workspace .profile-popover button > svg {
+  flex-shrink: 0;
+}
+.workspace .profile-popover button > svg:last-child {
+  opacity: .55;
+}
+.workspace .profile-popover button:hover,
+.workspace .profile-popover button:focus-visible,
+.workspace .profile-popover button[aria-current="page"] {
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+.workspace .profile-popover-store {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+  padding: 12px 10px 6px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 10px;
+}
+.workspace .profile-popover-store > svg {
+  flex-shrink: 0;
+}
+.workspace .profile-popover-store > span:first-of-type {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.workspace .profile-demo-label {
+  padding: 2px 6px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  font-size: 9px;
+  font-weight: 600;
+}
+.account-popover-enter-active,
+.account-popover-leave-active {
+  transition: opacity 150ms ease, transform 150ms ease;
+}
+.account-popover-enter-from,
+.account-popover-leave-to {
+  opacity: 0;
+  transform: translateY(-4px) scale(.98);
+}
+@media (max-width: 760px) {
+  .workspace .topbar .profile {
+    min-height: 40px;
+    padding: 3px;
+    gap: 0;
+  }
+  .workspace .account-anchor .profile-avatar {
+    width: 32px;
+    height: 32px;
+  }
+  .workspace .topbar .profile-copy,
+  .workspace .topbar .profile > svg {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .account-popover-enter-active,
+  .account-popover-leave-active {
+    transition: none;
+  }
+}

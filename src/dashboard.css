@@ -1139,7 +1139,7 @@
 
 /* Metronic-style aside: neutral slate, readable labels, and one blue accent. */
 .workspace .sidebar {
-  --sidebar-surface: #2b3038;
+  --sidebar-surface: #0e2535;
   --sidebar-raised: #343a43;
   --sidebar-text: #e2e5e9;
   --sidebar-muted: #b0b7c2;

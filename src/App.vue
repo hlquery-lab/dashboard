@@ -8,7 +8,7 @@ import {
   nextTick,
   watch,
 } from "vue";
-import { useStorage } from "@vueuse/core";
+import { onClickOutside, useStorage } from "@vueuse/core";
 import {
   Search,
   Bell,
@@ -23,20 +23,31 @@ import {
   ExternalLink,
   Settings2,
   Store,
-  ShoppingBag,
   Package,
   ArrowUpRight,
   Check,
   X,
   Truck,
+  CircleHelp,
+  Palette,
 } from "lucide-vue-next";
+import { useI18n } from "vue-i18n";
 import SidebarNavigation from "./components/SidebarNavigation.vue";
 import CommandPalette from "./components/CommandPalette.vue";
 const SettingsView = defineAsyncComponent(
   () => import("./views/SettingsView.vue"),
 );
+const HelpCenterView = defineAsyncComponent(
+  () => import("./views/HelpCenterView.vue"),
+);
 const AppearanceView = defineAsyncComponent(
   () => import("./views/AppearanceView.vue"),
+);
+const AuthenticationView = defineAsyncComponent(
+  () => import("./views/AuthenticationView.vue"),
+);
+const SearchResultsView = defineAsyncComponent(
+  () => import("./views/SearchResultsView.vue"),
 );
 const CommerceDashboard = defineAsyncComponent(
   () => import("./commerce/CommerceDashboard.vue"),
@@ -62,6 +73,18 @@ import { createCommerce } from "./commerce/store.js";
 import { navigationPages, pageGroups } from "./data/navigation.js";
 import { dateLabel, demoDate } from "./commerce/data.js";
 const commerce = createCommerce();
+const { locale, t } = useI18n();
+const localeOptions = [
+  { code: "en", flag: "🇺🇸", name: "English" },
+  { code: "es", flag: "🇪🇸", name: "Español" },
+  { code: "fr", flag: "🇫🇷", name: "Français" },
+];
+const currentLocale = computed(() => localeOptions.find((item) => item.code === locale.value) || localeOptions[0]);
+function setLocale(code) {
+  locale.value = code;
+  localStorage.setItem("hlquery-locale", code);
+  document.documentElement.lang = code;
+}
 const { state, lowStock, unfulfilled } = commerce;
 const aliases = {
   Projects: "Orders",
@@ -94,6 +117,7 @@ const pageFromHash = () => {
 };
 const valid = new Set(navigationPages.map((p) => p.page));
 const page = ref(valid.has(pageFromHash()) ? pageFromHash() : "Overview");
+const isAuthPage = computed(() => ["Login 01", "Login 02", "Sign up 01", "Sign up 02"].includes(page.value));
 const compact = useStorage("hlquery-compact-navigation", false),
   dense = useStorage("hlquery-compact-tables", false),
   dark = useStorage("leopemtn-dark", false);
@@ -105,6 +129,15 @@ const storeName = ref(savedName.value),
   commandOpen = ref(false),
   notifications = ref(false),
   profileOpen = ref(false);
+const profileAnchor = ref(null),
+  profileTrigger = ref(null);
+onClickOutside(profileAnchor, () => (profileOpen.value = false));
+async function openProfileFromKeyboard() {
+  profileOpen.value = true;
+  notifications.value = false;
+  await nextTick();
+  profileAnchor.value?.querySelector("nav button")?.focus();
+}
 const selectedOrder = ref(null),
   orderCreate = ref(false),
   viewRef = ref(null),
@@ -136,6 +169,7 @@ function keydown(event) {
     commandOpen.value = !commandOpen.value;
   }
   if (event.key === "Escape") {
+    if (profileOpen.value) profileTrigger.value?.focus();
     menuOpen.value = false;
     notifications.value = false;
     profileOpen.value = false;
@@ -144,7 +178,7 @@ function keydown(event) {
 watch(
   page,
   (value) =>
-    (document.title = `${value === "Overview" ? "Store overview" : value} · ${savedName.value} · HLQuery`),
+    (document.title = `${value === "Overview" ? "" : `${value} · `}Open Source Dashboard · HLQuery`),
   { immediate: true },
 );
 onMounted(() => {
@@ -159,7 +193,7 @@ onBeforeUnmount(() => {
   clearTimeout(timer);
 });
 const descriptions = {
-  Overview: "Your store, at a glance. Let’s make today a good one.",
+  Overview: "An open source dashboard for your next project.",
   Orders: "Every order, from checkout to your customer’s door.",
   Fulfillment: "Paid orders ready for the next step. Pack, ship, and deliver.",
   Products: "Good products deserve a great storefront. Manage yours here.",
@@ -172,7 +206,11 @@ const descriptions = {
   Activity: "The latest orders, stock changes, and store updates.",
   Settings: "The details that make this store yours.",
   Appearance: "A comfortable place to run your business.",
-  Help: "Everything you need to explore your ecommerce store.",
+  Help: "Guides and resources to help you run your store.",
+  "Login 01": "A simple welcome back. Centered, focused, and ready for your brand.",
+  "Login 02": "A branded welcome, with room to tell your story.",
+  "Sign up 01": "A clear first step. A clean registration experience for your next product.",
+  "Sign up 02": "Make a great first impression with a split-screen registration experience.",
 };
 const primaryLabel = computed(() =>
   ["Overview", "Orders", "Fulfillment"].includes(page.value)
@@ -205,32 +243,7 @@ function saveSettings() {
   savedName.value = name;
   notify("Store settings saved");
 }
-const faqs = [
-  [
-    "How does this demo work?",
-    "This is an interactive ecommerce demo. Products, orders, customers, discounts, and preferences are saved in this browser. No payments, emails, or shipments are processed.",
-  ],
-  [
-    "How do I create an order?",
-    "Choose Create order, select a customer, and add available products. An active discount can be applied at checkout. Creating the order reserves its stock immediately.",
-  ],
-  [
-    "How does fulfillment work?",
-    "A paid order can move from Unfulfilled to Processing, Shipped, and Delivered. Orders awaiting payment must be marked paid first. Cancelling an unshipped order restores stock and marks a paid order as refunded. These are demo state changes.",
-  ],
-  [
-    "How do I update stock?",
-    "Open Inventory and choose Restock. Enter the number of units to add. Draft products remain unavailable for new orders until you publish them.",
-  ],
-  [
-    "What currency is used?",
-    "Every price, order total, invoice, and financial export is in USD. Order line prices are saved when the order is created, so later product price changes do not alter past orders.",
-  ],
-  [
-    "Why are the dates in November 2026?",
-    "The store uses a fixed sample date of November 23, 2026. Analytics filters use this reference date so the demo remains consistent.",
-  ],
-];
+
 </script>
 <template>
   <v-app
@@ -243,6 +256,10 @@ const faqs = [
     }"
   >
     <a class="skip-link" href="#main">Skip to content</a>
+    <main v-if="isAuthPage" id="main" tabindex="-1">
+      <AuthenticationView :key="page" :page="page" @navigate="navigate" />
+    </main>
+    <template v-else>
     <button
       v-if="menuOpen"
       class="backdrop"
@@ -254,15 +271,8 @@ const faqs = [
         ><img class="brand-mark" src="/logo.png" alt="" /><span
           class="brand-word"
           >HLQuery<span class="brand-dot">.</span></span
-        ><span class="pro-tag">SHOP</span></a
+        ></a
       >
-      <button class="workspace-switch" @click="navigate('Settings')">
-        <span class="workspace-symbol"><Store :size="19" /></span
-        ><span class="workspace-copy"
-          ><strong>{{ savedName }}</strong
-          ><small>Demo store · USD</small></span
-        ><ChevronDown :size="16" />
-      </button>
       <SidebarNavigation
         :page="page"
         :compact="compact && !menuOpen"
@@ -309,12 +319,20 @@ const faqs = [
           ><ChevronRight :size="13" /><strong>{{ page }}</strong>
         </div>
         <div class="topbar-tools">
+          <label class="locale-switch" :aria-label="t('language')">
+            <span class="locale-flag" aria-hidden="true">{{ currentLocale.flag }}</span>
+            <span class="locale-name" aria-hidden="true">{{ currentLocale.name }}</span>
+            <select :value="locale" :aria-label="t('language')" @change="setLocale($event.target.value)">
+              <option v-for="option in localeOptions" :key="option.code" :value="option.code">{{ option.flag }} {{ option.name }}</option>
+            </select>
+            <ChevronDown :size="13" aria-hidden="true" />
+          </label>
           <button
             class="global-search command-trigger"
             aria-label="Search store"
             @click="commandOpen = true"
           >
-            <Search :size="16" /><span>Search orders, pages…</span
+            <Search :size="16" /><span>{{ t('search') }}</span
             ><kbd>⌘ K</kbd>
           </button>
           <button
@@ -365,27 +383,49 @@ const faqs = [
             </div>
           </div>
           <span class="toolbar-divider"></span>
-          <div class="popover-anchor">
+          <div ref="profileAnchor" class="popover-anchor account-anchor"
+            @focusout="(event) => { if (!event.currentTarget.contains(event.relatedTarget)) profileOpen = false; }"
+          >
             <button
+              ref="profileTrigger"
               class="profile"
               aria-label="Store account"
               :aria-expanded="profileOpen"
+              aria-controls="store-account-navigation"
+              @keydown.down.prevent="openProfileFromKeyboard"
               @click="
                 profileOpen = !profileOpen;
                 notifications = false;
               "
             >
-              <span class="avatar profile-avatar">JW</span
+              <span class="avatar profile-avatar" aria-hidden="true">JW</span
               ><span class="profile-copy"
                 ><strong>James Wilson</strong><small>Store owner</small></span
-              ><ChevronDown :size="14" />
+              ><ChevronDown :size="14" aria-hidden="true" />
             </button>
-            <div v-if="profileOpen" class="popover profile-popover">
-              <strong>James Wilson</strong><small>Demo store owner</small
-              ><button @click="navigate('Settings')">
-                <Settings2 :size="16" />Store settings</button
-              ><button @click="navigate('Help')">Demo help</button>
-            </div>
+            <Transition name="account-popover">
+              <nav v-if="profileOpen" id="store-account-navigation"
+                class="popover profile-popover" aria-label="Store account navigation">
+                <div class="profile-popover-user">
+                  <span class="avatar profile-avatar" aria-hidden="true">JW</span>
+                  <div><strong>James Wilson</strong><small>Store owner</small></div>
+                </div>
+                <div class="profile-popover-links">
+                  <button :aria-current="page === 'Settings' ? 'page' : undefined" @click="navigate('Settings')">
+                    <Settings2 :size="17" aria-hidden="true" /><span>Store settings</span><ChevronRight :size="14" aria-hidden="true" />
+                  </button>
+                  <button :aria-current="page === 'Appearance' ? 'page' : undefined" @click="navigate('Appearance')">
+                    <Palette :size="17" aria-hidden="true" /><span>Appearance</span><ChevronRight :size="14" aria-hidden="true" />
+                  </button>
+                  <button :aria-current="page === 'Help' ? 'page' : undefined" @click="navigate('Help')">
+                    <CircleHelp :size="17" aria-hidden="true" /><span>Help center</span><ChevronRight :size="14" aria-hidden="true" />
+                  </button>
+                </div>
+                <div class="profile-popover-store">
+                  <Store :size="15" aria-hidden="true" /><span :title="savedName">{{ savedName }}</span><span class="profile-demo-label">Demo</span>
+                </div>
+              </nav>
+            </Transition>
           </div>
         </div>
       </header>
@@ -398,7 +438,7 @@ const faqs = [
               }}<span class="demo-badge">Demo store</span>
             </div>
             <h1>
-              {{ page === "Overview" ? "Store overview" : page
+              {{ page === "Overview" ? "Dashboard" : page === "Help" ? "Help center" : page
               }}<span
                 v-if="page === 'Overview'"
                 class="commerce-heading-dot"
@@ -477,6 +517,11 @@ const faqs = [
           @order="selectedOrder = $event"
           @notify="notify"
         />
+        <SearchResultsView
+          v-else-if="['Search grid', 'Search list'].includes(page)"
+          :key="page"
+          :page="page"
+        />
         <SettingsView
           v-else-if="page === 'Settings'"
           v-model:name="storeName"
@@ -521,37 +566,14 @@ const faqs = [
             <time :datetime="entry.date">{{ dateLabel(entry.date) }}</time>
           </article>
         </section>
-        <section v-else class="c-help">
-          <div class="c-help-banner">
-            <ShoppingBag :size="32" />
-            <div>
-              <span class="panel-kicker">WELCOME TO YOUR STORE</span>
-              <h2>Everything you need to try it out.</h2>
-              <p>
-                Explore a complete store workflow with sample products,
-                customers, and orders.
-              </p>
-            </div>
-          </div>
-          <details
-            v-for="[question, answer] in faqs"
-            :key="question"
-            class="card"
-          >
-            <summary>{{ question }}<Plus :size="16" /></summary>
-            <p>{{ answer }}</p>
-          </details>
-          <button class="button primary" @click="navigate('Overview')">
-            Explore your store <ArrowUpRight :size="16" />
-          </button>
-        </section>
+        <HelpCenterView v-else @navigate="navigate" />
         <footer class="c-footer">
           <span
             >© 2026 HLQuery <span class="c-footer-divider">/</span>
             {{ savedName }}</span
           ><span>Sample data · USD · {{ dateLabel(demoDate) }}</span
           ><button @click="navigate('Help')">
-            Demo help <ArrowUpRight :size="12" />
+            Help center <ArrowUpRight :size="12" />
           </button>
         </footer>
       </main>
@@ -589,5 +611,6 @@ const faqs = [
         ></template
       ></v-snackbar
     >
+    </template>
   </v-app>
 </template>

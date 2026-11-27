@@ -4,7 +4,7 @@
 
 <div align="center">
 
-**An interactive ecommerce dashboard built for exploring everyday store operations.**
+**An open source dashboard you can customize for your next project.**
 
 [![Website](https://img.shields.io/badge/Website-hlquery.com-blue?logo=google-chrome&logoColor=white&labelColor=000000)](https://www.hlquery.com)
 [![Docs](https://img.shields.io/badge/Docs-guides.hlquery.com-brightgreen?logo=readthedocs&logoColor=white&labelColor=000000)](https://guides.hlquery.com/)
@@ -22,7 +22,7 @@
 
 ### What is the dashboard?
 
-The HLQuery dashboard is a working ecommerce demo built with **Vue 3, Vuetify, Chart.js, Vite, and Lucide icons**. It connects store reporting, catalog management, customers, discounts, and fulfillment through shared sample order records.
+The HLQuery dashboard is an open source starting point built with **Vue 3, Vuetify, Chart.js, Vite, and Lucide icons**. The included ecommerce demo connects reporting, catalog management, customers, discounts, and fulfillment through shared sample order records that you can replace with your project's data and workflows.
 
 ### Getting started
 

@@ -6,7 +6,9 @@ test("ecommerce overview and reporting periods use paid order data", async ({
   const errors = [];
   page.on("pageerror", (e) => errors.push(e.message));
   await page.goto("/");
-  await expect(page.locator("h1")).toHaveText("Store overview");
+  await expect(page.locator("h1")).toHaveText("Dashboard");
+  await expect(page).toHaveTitle("Open Source Dashboard · HLQuery");
+  await expect(page.locator(".brand")).not.toContainText("SHOP");
   await expect(page.locator(".c-metric > strong")).toHaveText([
     "$1,559.00",
     "11",
@@ -56,7 +58,7 @@ test("all store pages fit desktop, tablet, mobile, and compact navigation", asyn
     for (const name of pages) {
       await page.goto("/#" + name);
       await expect(page.locator("h1")).toHaveText(
-        name === "Overview" ? "Store overview" : name,
+        name === "Overview" ? "Dashboard" : name,
       );
       await expect
         .poll(

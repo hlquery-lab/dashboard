@@ -1,6 +1,7 @@
 <script setup>
 import { watch } from "vue";
 import { useStorage } from "@vueuse/core";
+import { useI18n } from "vue-i18n";
 import { vAutoAnimate } from "@formkit/auto-animate/vue";
 import {
   ChevronRight,
@@ -16,6 +17,11 @@ const props = defineProps({
   deliveredCount: Number,
 });
 const emit = defineEmits(["navigate", "expand", "search"]);
+const { t } = useI18n();
+const translateLabel = (label) => {
+  const keys = { STORE: "store", SHOWCASE: "showcase", PREFERENCES: "preferences", Overview: "home", Orders: "orders", "All orders": "orders", Fulfillment: "fulfillment", Products: "products", Inventory: "inventory", Customers: "customers", Analytics: "analytics", Settings: "settings", Appearance: "appearance", Activity: "activity", Authentication: "authentication", "Search results": "searchResults", "Search grid": "searchResults", "Search list": "searchResults", "Login 01": "login1", "Login 02": "login2", "Sign up 01": "signup1", "Sign up 02": "signup2", "Create order": "createOrder", "Quick search": "quickSearch", "Help center": "help" };
+  return keys[label] ? t(keys[label]) : label;
+};
 const expanded = useStorage("hlquery-commerce-navigation-groups", [
   "orders",
   "catalog",
@@ -58,7 +64,7 @@ function toggle(item) {
       @click="emit('search')"
     >
       <Search :size="16" /><template v-if="!compact"
-        ><span>Quick search</span><kbd>⌘ K</kbd></template
+        ><span>{{ t('quickSearch') }}</span><kbd>⌘ K</kbd></template
       >
     </button>
     <section
@@ -68,7 +74,7 @@ function toggle(item) {
       :data-section="section.section"
     >
       <div v-if="!compact" class="navigation-caption">
-        {{ section.section }}
+        {{ translateLabel(section.section) }}
       </div>
       <div
         v-for="item in section.items"
@@ -83,15 +89,15 @@ function toggle(item) {
               'group-active': active(item),
               'group-expanded': expanded.includes(item.id) && !compact,
             }"
-            :aria-label="item.label"
+            :aria-label="translateLabel(item.label)"
             :aria-expanded="!compact && expanded.includes(item.id)"
             :aria-controls="`submenu-${item.id}`"
-            :title="compact ? item.label : undefined"
+            :title="compact ? translateLabel(item.label) : undefined"
             @click="toggle(item)"
           >
             <span class="nav-icon"
               ><component :is="item.icon" :size="18" /></span
-            ><span class="nav-item-label">{{ item.label }}</span
+            ><span class="nav-item-label">{{ translateLabel(item.label) }}</span
             ><small
               v-if="item.id === 'orders' && !compact"
               class="nav-project-count"
@@ -114,12 +120,12 @@ function toggle(item) {
               v-for="child in item.children"
               :key="child.page"
               :href="`#${child.page}`"
-              :aria-label="child.label"
+              :aria-label="translateLabel(child.label)"
               :class="{ 'submenu-active': page === child.page }"
               :aria-current="page === child.page ? 'page' : undefined"
               @click.prevent="emit('navigate', child.page)"
               ><span class="nav-child-bullet" aria-hidden="true"></span
-              ><span class="nav-item-label">{{ child.label }}</span
+              ><span class="nav-item-label">{{ translateLabel(child.label) }}</span
               ><span v-if="child.page === 'Board'" class="nav-child-tag"
                 >NEW</span
               ><ChevronRight

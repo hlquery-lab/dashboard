@@ -381,6 +381,54 @@ h2 {
   align-items: center;
   gap: 16px;
 }
+
+.topbar .locale-switch {
+  position: relative;
+  display: inline-flex;
+  flex-direction: row;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 7px;
+  height: 36px;
+  margin: 0;
+  padding: 0 9px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  color: var(--muted);
+  background: var(--surface);
+  cursor: pointer;
+  transition: border-color .16s, box-shadow .16s;
+}
+.locale-switch:hover { border-color:var(--primary); box-shadow:0 2px 8px #153b5e0b; }
+.locale-flag { font-size:17px; line-height:1; }
+.locale-name { color: var(--text); font-size: 12px; font-weight: 600; white-space: nowrap; }
+.topbar .locale-switch select {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.locale-switch select option { color:#0a2540; background:#fff; }
+.topbar .breadcrumb { min-width: 0; }
+.topbar .breadcrumb > strong { overflow: hidden; text-overflow: ellipsis; }
+.topbar-tools { flex-shrink: 0; }
+@media (max-width: 1100px) {
+  .locale-name { display: none; }
+}
+.workspace :is(.button, .text-button, .auth-submit, .plan-cta, .approach-cta) { transition: transform .16s ease, box-shadow .16s ease, background-color .16s ease, border-color .16s ease, color .16s ease; }
+.workspace .button { min-height:42px; padding-inline:15px; border-radius:9px; font-size:.8rem; font-weight:650; letter-spacing:-.01em; box-shadow:0 1px 2px #0a254008, inset 0 1px 0 #ffffff90; }
+.workspace .button:not(.primary):hover { transform:translateY(-1px); border-color:#a9c8e4; background:var(--surface); box-shadow:0 5px 14px #0a254012; }
+.workspace .button.primary { border-color:#1264b6; background:linear-gradient(180deg,#318de5 0%,#1976d3 100%); box-shadow:inset 0 1px 0 #ffffff45,0 3px 0 #125da9,0 6px 13px #1976d32e; }
+.workspace .button.primary:hover { transform:translateY(-1px); background:linear-gradient(180deg,#2582db 0%,#1268c0 100%); box-shadow:inset 0 1px 0 #ffffff4d,0 4px 0 #104f91,0 9px 18px #1976d33d; }
+.workspace .button.primary:active { transform:translateY(2px); box-shadow:inset 0 2px 4px #073d7440,0 1px 0 #125da9; }
+.workspace .icon-button { width:36px; height:36px; border:1px solid transparent; border-radius:9px; transition:background .16s,border-color .16s,color .16s,transform .16s; }
+.workspace .icon-button:hover { transform:translateY(-1px); border-color:var(--line); color:var(--primary); background:var(--surface); box-shadow:0 4px 10px #0a25400d; }
+.workspace :is(.button,.icon-button,.text-button):focus-visible { outline:3px solid #55a6ed; outline-offset:3px; }
+.workspace.dark .button:not(.primary) { box-shadow:inset 0 1px 0 #ffffff0a; }
+.workspace.dark .button:not(.primary):hover { border-color:#46657e; background:#ffffff0a; }
 .icon-button {
   display: inline-flex;
   align-items: center;
